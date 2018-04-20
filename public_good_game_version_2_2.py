@@ -151,6 +151,7 @@ def main_2(A, number_of_rounds):
 # plt.ylabel("Percentage")
 # plt.show()
 
+
 for j in range(100):
     a = main_2([0]*int(Z*(1-fc)) + [1]*int(Z*fc), number_of_generations)
     plt.plot(np.arange(1, number_of_generations+1), a)
