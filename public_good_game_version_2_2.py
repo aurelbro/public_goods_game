@@ -18,7 +18,7 @@ nI = 5
 S = [0, 1]                    # set of strategies
 fc = 0.5
 M = 0                          # necessary threshold for the benefit being shared
-number_of_generations = 100000
+number_of_generations = 1000
 
 # importations
 from random import *
