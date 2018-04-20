@@ -7,27 +7,46 @@ Created on Fri Apr 13 15:24:07 2018
 
 Z = 1000                      # number of players
 N = 10                        # number of players per random group
-r = 12                        # benefit
+# r = 12                        # benefit
 c = 1                         # cost
-mu = 0                        # mutation rate
-Beta = 10                     # selection stength
+# mu = 0                        # mutation rate
+# Beta = 10                     # selection stength
 # number of games played before we launch the evolution process
 number_of_games = 100
 # maximum number of strategies changed during an evolution process
 nI = 5
 S = [0, 1]                    # set of strategies
-fc = 0.5
-M = 0                          # necessary threshold for the benefit being shared
-number_of_generations = 1000
+# fc = 0.5
+# M = 0                          # necessary threshold for the benefit being shared
+number_of_generations = 100000
 
 # importations
 from random import *
 from math import exp, log
 import numpy as np
 import matplotlib.pyplot as plt
+import sys
+
+
+def usage():
+    print("usage : r, mu, beta, fc, M")
+
+
+numberOfArgs = len(sys.argv)
+if(numberOfArgs < 6):
+    usage()
+    exit(-1)
+
+r = int(sys.argv[1])
+mu = float(sys.argv[2])
+Beta = float(sys.argv[3])
+fc = float(sys.argv[4])
+M = int(sys.argv[5])
 
 
 # auxiliary functions
+
+
 def indicator_function(boolean):
     if (boolean):
         return 1
@@ -107,6 +126,7 @@ def evolution(A, W):
 
 # main function
 def main(A, number_of_rounds):
+
     tab = np.zeros(number_of_rounds)
     tab[0] = number_of_cooperators(A)
     print(0, tab[0])
@@ -126,6 +146,9 @@ def main(A, number_of_rounds):
 
 
 def main_2(A, number_of_rounds):
+    if(numberOfArgs < 6):
+        usage()
+        exit(-1)
     tab = np.zeros(number_of_rounds)
     tab[0] = number_of_cooperators(A)
     # print(0, tab[0])
