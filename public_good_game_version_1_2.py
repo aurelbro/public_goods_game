@@ -14,10 +14,9 @@ Beta = 10                    # selection stength
 # number of games played before we launch the evolution process
 number_of_games = 100
 # maximum number of strategies changed during an evolution process
-nI = 50
+nI = 5
 S = [0, 1]                     # set of strategies
 fc = 0
-
 number_of_generations = 100000
 
 # importations
@@ -124,7 +123,7 @@ def main(A, number_of_rounds):
 
 
 def main_2(A, number_of_rounds):
-    print("x")
+    #print("x")
     tab = np.zeros(number_of_rounds)
     tab[0] = number_of_cooperators(A)
     # print(0, tab[0])

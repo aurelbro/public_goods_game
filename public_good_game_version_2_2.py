@@ -18,7 +18,7 @@ nI = 5
 S = [0, 1]                    # set of strategies
 # fc = 0.5
 # M = 0                          # necessary threshold for the benefit being shared
-number_of_generations = 100000
+number_of_generations = 100
 
 # importations
 from random import *
@@ -175,7 +175,7 @@ def main_2(A, number_of_rounds):
 # plt.show()
 
 
-for j in range(100):
+for j in range(1):
     a = main_2([0]*int(Z*(1-fc)) + [1]*int(Z*fc), number_of_generations)
     plt.plot(np.arange(1, number_of_generations+1), a)
     np.savetxt('/home/aurelien/Documents/test.txt', a)
@@ -185,4 +185,4 @@ plt.ylabel("Number of cooperators")
 axes = plt.gca()
 axes.set_ylim(0, 1000)
 # plt.show()
-plt.savefig('/home/aurelien/Images/test.png')
+plt.savefig('experiments/test_%d_%.2f.png' % (r, mu))
