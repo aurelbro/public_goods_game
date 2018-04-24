@@ -16,9 +16,9 @@ number_of_games = 100
 # maximum number of strategies changed during an evolution process
 nI = 5
 S = [0, 1]                    # set of strategies
-# fc = 0.5
+#fc = 0.5
 # M = 0                          # necessary threshold for the benefit being shared
-number_of_generations = 100
+number_of_generations = 100000
 
 # importations
 from random import *
@@ -26,22 +26,26 @@ from math import exp, log
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
+import csv
+import time
+import os
 
 
 def usage():
-    print("usage : r, mu, beta, fc, M")
+    print("usage : folder, r, mu, beta, fc, M")
 
 
 numberOfArgs = len(sys.argv)
-if(numberOfArgs < 6):
+if(numberOfArgs < 7):
     usage()
     exit(-1)
 
-r = int(sys.argv[1])
-mu = float(sys.argv[2])
-Beta = float(sys.argv[3])
-fc = float(sys.argv[4])
-M = int(sys.argv[5])
+folder = sys.argv[1]
+r = int(sys.argv[2])
+mu = float(sys.argv[3])
+Beta = float(sys.argv[4])
+fc = float(sys.argv[5])
+M = int(sys.argv[6])
 
 
 # auxiliary functions
@@ -146,9 +150,9 @@ def main(A, number_of_rounds):
 
 
 def main_2(A, number_of_rounds):
-    if(numberOfArgs < 6):
-        usage()
-        exit(-1)
+    # if(numberOfArgs < 6):
+    #    usage()
+    #    exit(-1)
     tab = np.zeros(number_of_rounds)
     tab[0] = number_of_cooperators(A)
     # print(0, tab[0])
@@ -175,14 +179,30 @@ def main_2(A, number_of_rounds):
 # plt.show()
 
 
-for j in range(1):
-    a = main_2([0]*int(Z*(1-fc)) + [1]*int(Z*fc), number_of_generations)
-    plt.plot(np.arange(1, number_of_generations+1), a)
-    np.savetxt('/home/aurelien/Documents/test.txt', a)
-plt.title("500 cooperators, no mutation, r=12")
-plt.xlabel("Number of generations")
-plt.ylabel("Number of cooperators")
-axes = plt.gca()
-axes.set_ylim(0, 1000)
+# for j in range(1):
+a = main_2([0]*int(Z*(1-fc)) + [1]*int(Z*fc), number_of_generations)
+date = time.strftime("%Y%m%d-%H-%M-%S")
+parameters = "r=%02d_mu=%.2f_Beta=%.1f_fc=%.2f_M=%02d.tsv" % (
+    r, mu, Beta, fc, M)
+subfolder = parameters
+subfolder = folder + "/" + subfolder
+if not os.path.exists(subfolder):
+    os.mkdir(subfolder)
+with open(subfolder + "/" + date + parameters, 'w') as fhOut:
+    writer = csv.writer(fhOut, delimiter='\t', lineterminator='\n')
+    writer.writerow(a)
+
+
+#b = main_2([0]*int(Z*(1-fc)) + [1]*int(Z*fc), number_of_generations)
+# with open(folder + "/exemple_2.tsv", 'w') as fhOut:
+#    writer = csv.writer(fhOut, delimiter='\t', lineterminator='\n')
+#    writer.writerow(b)
+#plt.plot(np.arange(1, number_of_generations+1), a)
+#np.savetxt('/home/aurelien/Documents/test.txt', a)
+#plt.title("500 cooperators, no mutation, r=12")
+#plt.xlabel("Number of generations")
+#plt.ylabel("Number of cooperators")
+#axes = plt.gca()
+#axes.set_ylim(0, 1000)
 # plt.show()
-plt.savefig('experiments/test_%d_%.2f.png' % (r, mu))
+#plt.savefig('experiments/test_%d_%.2f_%g_%j_%i.png' % (r, mu, Beta, fc, M))
