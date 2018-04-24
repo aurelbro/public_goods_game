@@ -192,7 +192,7 @@ with open(subfolder + "/" + date + parameters, 'w') as fhOut:
     writer = csv.writer(fhOut, delimiter='\t', lineterminator='\n')
     writer.writerow(a)
 
-
+print("finished games " + parameters)
 #b = main_2([0]*int(Z*(1-fc)) + [1]*int(Z*fc), number_of_generations)
 # with open(folder + "/exemple_2.tsv", 'w') as fhOut:
 #    writer = csv.writer(fhOut, delimiter='\t', lineterminator='\n')
