@@ -43,11 +43,11 @@ folder = sys.argv[1]
 # b = pd.read_table(
 # '/home/aurelien/istc/public_goods_game/experiments/exemple_2.tsv')exemple_7.tsv", 'w')
 
-file = open(folder + "/merge_result.tsv", "w")
+file = open(folder + "/merge_result.dat", "w")
 writer = csv.writer(file, delimiter="\t")
 
 for filename in os.listdir(folder):
-    if(filename.endswith("2.tsv")):
+    if(filename.endswith(".tsv")):
         print(filename)
         fd = open(folder+"/"+filename, "rt")
         rd = csv.reader(fd, delimiter="\t")
