@@ -92,6 +92,9 @@ def complete_game(A):
         shuffle(groups)
         tabel_c = [0]*number_of_groups
         for k in range(number_of_groups):
+            # print("len(A) = %d" % len(A))
+            # for l in range(N):
+                # print(groups[k*N+l]-1)
             tabel_c[k] = number_of_cooperators(
                 [A[groups[k*N+l]-1] for l in range(N)])
             for j in range(N):
@@ -180,7 +183,12 @@ def main_2(A, number_of_rounds):
 
 
 # for j in range(1):
-a = main_2([0]*int(Z*(1-fc)) + [1]*int(Z*fc), number_of_generations)
+A = [0]*int(round(Z*(1-fc))) + [1]*int(round(Z*fc))
+
+# print(len(A))
+# print(int(round(Z*(1-fc))))
+# print(int(Z*fc))
+a = main_2(A, number_of_generations)
 date = time.strftime("%Y%m%d-%H-%M-%S")
 parameters = "r=%02d_mu=%.2f_Beta=%.1f_fc=%.2f_M=%02d.tsv" % (
     r, mu, Beta, fc, M)
