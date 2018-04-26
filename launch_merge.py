@@ -1,2 +1,2 @@
-for folder in os.listdir(experiments):
+for folder in experiments:
     python merge.py folder
