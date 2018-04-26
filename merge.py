@@ -1,5 +1,5 @@
 # import csv
-import pandas as pd
+# /home/aurelien/istc/public_goods_game/experimentsimport pandas as pd
 import csv
 import os
 import sys
