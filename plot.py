@@ -18,20 +18,26 @@ if(numberOfArgs < 2):
 
 folder = sys.argv[1]
 
-with open(folder + "/exemple.tsv") as tsvfile:
+with open(folder + "/merge_result.dat") as tsvfile:
     reader = csv.reader(tsvfile, delimiter='\t')
     for row in reader:
         plt.plot(np.arange(1, number_of_generations+1), map(float, row))
-        plt.show()
+        # plt.show()
+        plt.title(folder)
+        plt.xlabel("Number of generations")
+        plt.ylabel("Number of cooperators")
+        axes = plt.gca()
+        axes.set_ylim(0, 1000)
+        plt.savefig(folder + "/graphical_representation.pdf")
 
 #np.savetxt('/home/aurelien/Documents/test.txt', a)
-#plt.title("500 cooperators, no mutation, r=12")
+
 #plt.xlabel("Number of generations")
 #plt.ylabel("Number of cooperators")
 #axes = plt.gca()
 #axes.set_ylim(0, 1000)
 # plt.show()
-#plt.savefig('experiments/test_%d_%.2f_%g_%j_%i.png' % (r, mu, Beta, fc, M))
+#plt.savefig('experiments/test_%d_%.2f_.png' % (r, mu, Beta, fc, M))
 
 
 #time.strftime("%d %B %H:%M:%S")

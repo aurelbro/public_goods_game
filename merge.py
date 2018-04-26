@@ -48,7 +48,7 @@ writer = csv.writer(file, delimiter="\t")
 
 for filename in os.listdir(folder):
     if(filename.endswith(".tsv")):
-        print(filename)
+        # print(filename)
         fd = open(folder+"/"+filename, "rt")
         rd = csv.reader(fd, delimiter="\t")
         for row in rd:
