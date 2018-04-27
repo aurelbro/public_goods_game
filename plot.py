@@ -20,16 +20,24 @@ folder = sys.argv[1]
 plt.figure(figsize=(20, 10), dpi=150)
 with open(folder + "/merge_result.dat", "r") as tsvfile:
     reader = csv.reader(tsvfile, delimiter='\t')
+    complete_list = []
+
     for row in reader:
+        line = map(float, row)
         plt.plot(np.arange(1, number_of_generations+1),
-                 map(float, row), "--", linewidth=0.2)
+                 line, linestyle='-.', linewidth=0.05)
+        complete_list.append(line)
         # plt.show()
         plt.title(folder.strip(".tsv"))
         plt.xlabel("Number of generations")
         plt.ylabel("Number of cooperators")
         axes = plt.gca()
         axes.set_ylim(0, 1000)
-        plt.savefig(folder + "/graphical_representation.pdf")
+    mean = np.mean(np.array(complete_list), axis=0)
+    print(mean)
+    plt.plot(np.arange(1, number_of_generations+1),
+             mean, 'b', linewidth=4)
+    plt.savefig(folder + "/graphical_representation.pdf")
 
 #np.savetxt('/home/aurelien/Documents/test.txt', a)
 
