@@ -11,19 +11,20 @@ def usage():
 
 
 numberOfArgs = len(sys.argv)
-print(numberOfArgs)
+# print(numberOfArgs)
 if(numberOfArgs < 2):
     usage()
     exit(-1)
 
 folder = sys.argv[1]
-
-with open(folder + "/merge_result.dat") as tsvfile:
+plt.figure(figsize=(20, 10), dpi=150)
+with open(folder + "/merge_result.dat", "r") as tsvfile:
     reader = csv.reader(tsvfile, delimiter='\t')
     for row in reader:
-        plt.plot(np.arange(1, number_of_generations+1), map(float, row))
+        plt.plot(np.arange(1, number_of_generations+1),
+                 map(float, row), "--", linewidth=0.2)
         # plt.show()
-        plt.title(folder)
+        plt.title(folder.strip(".tsv"))
         plt.xlabel("Number of generations")
         plt.ylabel("Number of cooperators")
         axes = plt.gca()
