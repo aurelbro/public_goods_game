@@ -18,6 +18,10 @@ if (numberOfArgs < 2):
     exit(-1)
 
 folder = sys.argv[1]
+if (os.path.exists(folder + "/merge_result.dat")):
+    os.remove(folder + "/merge_result.dat")
+if (os.path.exists(folder + "/graphical_representation.pdf")):
+    os.remove(folder + "/graphical_representation.pdf")
 plt.figure(figsize=(20, 10), dpi=150)
 complete_list = []
 for file in os.listdir(folder):
