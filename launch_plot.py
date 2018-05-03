@@ -20,10 +20,10 @@ if(numberOfArgs < 2):
 folder_1 = sys.argv[1]
 
 for folder in os.listdir(folder_1):
-    # if (os.path.exists(folder_1 + "/" + folder + "/merge_result.dat")):
-        #os.remove(folder_1 + "/" + folder + "/merge_result.dat")
-    # if (os.path.exists(folder_1 + "/" + folder + "/graphical_representation.pdf")):
-       # os.remove(folder_1 + "/" + folder + "/graphical_representation.pdf")
+    if (os.path.exists(folder_1 + "/" + folder + "/merge_result.dat")):
+        os.remove(folder_1 + "/" + folder + "/merge_result.dat")
+    if (os.path.exists(folder_1 + "/" + folder + "/graphical_representation.pdf")):
+        os.remove(folder_1 + "/" + folder + "/graphical_representation.pdf")
     plt.figure(figsize=(20, 10), dpi=150)
     complete_list = []
     for file in os.listdir(folder_1 + "/" + folder):
@@ -36,11 +36,11 @@ for folder in os.listdir(folder_1):
                          line, linestyle='-.', linewidth=0.05)
             complete_list.append(line)
             # plt.show()
-            plt.title(folder.strip(".tsv"))
-            plt.xlabel("Number of generations")
-            plt.ylabel("Number of cooperators")
-            axes = plt.gca()
-            axes.set_ylim(-10, 1010)
+    plt.title(folder.strip(".tsv"))
+    plt.xlabel("Number of generations")
+    plt.ylabel("Number of cooperators")
+    axes = plt.gca()
+    axes.set_ylim(-10, 1010)
     mean = np.mean(np.array(complete_list), axis=0)
     # print(mean)
     plt.plot(np.arange(1, number_of_generations+1),
