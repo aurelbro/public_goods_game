@@ -1,0 +1,1 @@
+with open (experiments/r=14_mu=0.02_Beta=10.0_fc=0.70_M=06.tsv) as file:
