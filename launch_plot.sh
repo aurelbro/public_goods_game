@@ -1,3 +1,3 @@
-for folder in os.listdir(experiments) ; do
-  python plot.py folder
+for folder in ${experiments}/* ; do
+  python plot.py experiments/ $folder
 done

@@ -7,22 +7,22 @@ Created on Fri Apr 13 15:24:07 2018
 
 Z = 1000                      # number of players
 N = 10                        # number of players per random group
-r = 14.                        # benefit
+# r = 14.                        # benefit
 c = 1                         # cost
-mu = 0.1                       # mutation rate
-Beta = 10                     # selection stength
+# mu = 0.1                       # mutation rate
+# Beta = 10                     # selection stength
 # number of games played before we launch the evolution process
 number_of_games = 100
 # maximum number of strategies changed during an evolution process
 nI = 5
 S = [0, 1]                    # set of strategies
-fc = 0.95
-M = 0                          # necessary threshold for the benefit being shared
-number_of_generations = 3000
+#fc = 0.95
+# M = 0                          # necessary threshold for the benefit being shared
+number_of_generations = 6000
 
 # importations
 
-from math import exp, log
+#from math import exp, log
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
@@ -31,21 +31,23 @@ import time
 import os
 
 
-# def usage():
-#print("usage : folder, r, mu, beta, fc, M")
+def usage():
 
 
-#numberOfArgs = len(sys.argv)
-# if(numberOfArgs < 7):
-# usage()
-# exit(-1)
+print("usage : folder, r, mu, beta, fc, M")
 
-#folder = sys.argv[1]
-#r = int(sys.argv[2])
-#mu = float(sys.argv[3])
-#Beta = float(sys.argv[4])
-#fc = float(sys.argv[5])
-#M = int(sys.argv[6])
+
+numberOfArgs = len(sys.argv)
+if(numberOfArgs < 7):
+usage()
+exit(-1)
+
+folder = sys.argv[1]
+r = int(sys.argv[2])
+mu = float(sys.argv[3])
+Beta = float(sys.argv[4])
+fc = float(sys.argv[5])
+M = int(sys.argv[6])
 
 
 # auxiliary functions
@@ -58,7 +60,7 @@ def indicator_function(boolean):
 
 
 def prob_of_changing_strategy(i, j, W):
-    return(1./(1 + exp(- Beta * (W[j-1] - W[i-1]))))
+    return(1./(1 + np.exp(- Beta * (W[j-1] - W[i-1]))))
 
 
 def number_of_cooperators(t):
@@ -77,7 +79,7 @@ def tabel_payoff(n):
 
 
 Payoffs = [tabel_payoff(n) for n in range(N+1)]
-print(Payoffs)
+# print(Payoffs)
 
 # game simulation function
 
@@ -133,52 +135,52 @@ def evolution(A, W):
 
 
 # main function
-def main(A, number_of_rounds):
+# def main_4(A, number_of_rounds):
 
-    tab = np.zeros(number_of_rounds)
-    tab[0] = number_of_cooperators(A)
-    print(0, tab[0])
-    W = complete_game(A)
-    for i in range(1, number_of_rounds):
-        B = evolution(A, W)
-        C = [W[j] for j in range(len(A)) if (B[j] == 1)]
-        D = [W[j] for j in range(len(A)) if (B[j] == 0)]
-        print(i, "c:" + str(sum(C)/number_of_cooperators(B)),
-              "d:"+str(sum(D)/(len(A)-number_of_cooperators(B))))
-        if (B != A):
-            A = B
-            tab[i] = number_of_cooperators(A)
-            # print(i,tab[i])
-            W = complete_game(A)
-        else:
-            tab[i] = number_of_cooperators(A)
-            # print(i,tab[i])
-    plt.plot(np.arange(1, number_of_rounds+1), tab)
-    plt.show()
+    #tab = np.zeros(number_of_rounds)
+    #tab[0] = number_of_cooperators(A)
+    #print(0, tab[0])
+    #W = complete_game(A)
+    # for i in range(1, number_of_rounds):
+    #    B = evolution(A, W)
+    #    C = [W[j] for j in range(len(A)) if (B[j] == 1)]
+    #    D = [W[j] for j in range(len(A)) if (B[j] == 0)]
+    #    print(i, "c:" + str(sum(C)/number_of_cooperators(B)),
+    #          "d:"+str(sum(D)/(len(A)-number_of_cooperators(B))))
+    #    if (B != A):
+    #        A = B
+    #        tab[i] = number_of_cooperators(A)
+    # print(i,tab[i])
+    #        W = complete_game(A)
+    #    else:
+    #        tab[i] = number_of_cooperators(A)
+    # print(i,tab[i])
+    #plt.plot(np.arange(1, number_of_rounds+1), tab)
+    # plt.show()
 
 
-def main_2(A, number_of_rounds):
+# def main_2(A, number_of_rounds):
     # if(numberOfArgs < 6):
     #    usage()
     #    exit(-1)
-    tab = np.zeros(number_of_rounds)
-    tab[0] = number_of_cooperators(A)
+    #tab = np.zeros(number_of_rounds)
+    #tab[0] = number_of_cooperators(A)
     # print(0, tab[0])
-    W = complete_game(A)
-    for i in range(1, number_of_rounds):
-        B = evolution(A, W)
-        C = [W[j] for j in range(len(A)) if (A[j] == 1)]
-        D = [W[j] for j in range(len(A)) if (A[j] == 0)]
-        print(i, "c:" + str(sum(C)/number_of_cooperators(B)),
-              "d:"+str(sum(D)/(len(A)-number_of_cooperators(B))))
-        if (B != A):
-            A = B
-            tab[i] = number_of_cooperators(A)
-            #print(i, tab[i])
-            W = complete_game(A)
-        else:
-            tab[i] = number_of_cooperators(A)
-    return tab
+    #W = complete_game(A)
+    # for i in range(1, number_of_rounds):
+    #    B = evolution(A, W)
+    #    C = [W[j] for j in range(len(A)) if (A[j] == 1)]
+    #    D = [W[j] for j in range(len(A)) if (A[j] == 0)]
+    #    print(i, "c:" + str(sum(C)/number_of_cooperators(B)),
+    #          "d:"+str(sum(D)/(len(A)-number_of_cooperators(B))))
+    #    if (B != A):
+    #        A = B
+    #        tab[i] = number_of_cooperators(A)
+    #print(i, tab[i])
+    #        W = complete_game(A)
+    #    else:
+    #        tab[i] = number_of_cooperators(A)
+    # return tab
 
 
 #A = [0]*int(round(Z*(1-fc))) + [1]*int(round(Z*fc))
@@ -186,33 +188,24 @@ def main_2(A, number_of_rounds):
 #main(A, 5000)
 
 #a = main_2(A, number_of_generations)
-#date = time.strftime("%Y%m%d-%H-%M-%S")
-# parameters = "r=%02d_mu=%.2f_Beta=%.1f_fc=%.2f_M=%02d.tsv" % (
-#    r, mu, Beta, fc, M)
-#subfolder = parameters
-#subfolder = folder + "/" + subfolder
-# if not os.path.exists(subfolder):
-#    os.mkdir(subfolder)
-# with open(subfolder + "/" + date + parameters, 'w') as fhOut:
-#    writer = csv.writer(fhOut, delimiter='\t', lineterminator='\n')
-#    writer.writerow(a)
-
-def main_3(A, number_of_rounds):
-
-    tab = np.zeros(number_of_rounds)
-    for i in range(number_of_rounds):
-        tab[i] = number_of_cooperators(A)
-        W = complete_game(A)
-        C = [W[j] for j in range(len(A)) if (A[j] == 1)]
-        D = [W[j] for j in range(len(A)) if (A[j] == 0)]
-        print(i, "c:" + str(sum(C)/number_of_cooperators(A)),
-              "d:"+str(sum(D)/(len(A)-number_of_cooperators(A))))
-        B = evolution(A, W)
-    plt.plot(np.arange(1, number_of_rounds+1), tab)
-    plt.show()
 
 
-def main_4(A, number_of_rounds):
+# def main_3(A, number_of_rounds):
+
+#    tab = np.zeros(number_of_rounds)
+#    for i in range(number_of_rounds):
+#        tab[i] = number_of_cooperators(A)
+#        W = complete_game(A)
+#        C = [W[j] for j in range(len(A)) if (A[j] == 1)]
+#        D = [W[j] for j in range(len(A)) if (A[j] == 0)]
+#        print(i, "c:" + str(sum(C)/number_of_cooperators(A)),
+#              "d:"+str(sum(D)/(len(A)-number_of_cooperators(A))))
+#        B = evolution(A, W)
+#    plt.plot(np.arange(1, number_of_rounds+1), tab)
+#    plt.show()
+
+
+def main(A, number_of_rounds):
 
     tab = np.zeros(number_of_rounds)
     W = complete_game(A)
@@ -228,16 +221,18 @@ def main_4(A, number_of_rounds):
         if (B != A):
             A = B
             W = complete_game(A)
-    print("done")
     return tab
 
 
 A = [0]*int(round(Z*(1-fc))) + [1]*int(round(Z*fc))
-
-#main_3(A, 100)
-#main_4(A, 1000)
-
-for j in range(10):
-    plt.plot(np.arange(1, number_of_generations+1),
-             main_4([0]*int(Z*(1-fc)) + [1]*int(Z*fc), number_of_generations))
-plt.show()
+a = main(A, number_of_generations)
+date = time.strftime("%Y%m%d-%H-%M-%S")
+parameters = "r=%02d_mu=%.2f_Beta=%.1f_fc=%.2f_M=%02d.tsv" % (
+    r, mu, Beta, fc, M)
+subfolder = parameters
+subfolder = folder + "/" + subfolder
+if not os.path.exists(subfolder):
+    os.mkdir(subfolder)
+with open(subfolder + "/" + date + parameters, 'w') as fhOut:
+    writer = csv.writer(fhOut, delimiter='\t', lineterminator='\n')
+    writer.writerow(a)
