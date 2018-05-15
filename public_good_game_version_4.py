@@ -24,7 +24,7 @@ number_of_generations = 6000
 
 #from math import exp, log
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import sys
 import csv
 import time
