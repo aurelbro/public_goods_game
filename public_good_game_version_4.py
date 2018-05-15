@@ -32,15 +32,13 @@ import os
 
 
 def usage():
-
-
-print("usage : folder, r, mu, beta, fc, M")
+    print("usage : folder, r, mu, beta, fc, M")
 
 
 numberOfArgs = len(sys.argv)
 if(numberOfArgs < 7):
-usage()
-exit(-1)
+    usage()
+    exit(-1)
 
 folder = sys.argv[1]
 r = int(sys.argv[2])
