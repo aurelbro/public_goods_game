@@ -41,7 +41,7 @@ if(numberOfArgs < 7):
     exit(-1)
 
 folder = sys.argv[1]
-r = int(sys.argv[2])
+r = float(sys.argv[2])
 mu = float(sys.argv[3])
 Beta = float(sys.argv[4])
 fc = float(sys.argv[5])
