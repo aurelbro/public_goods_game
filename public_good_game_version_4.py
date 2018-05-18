@@ -212,7 +212,7 @@ def main(A, number_of_rounds):
         # print(i,tab[i])
         #C=[ W[j] for j in range(len(A)) if (A[j]==1) ]
         #D=[ W[j] for j in range(len(A)) if (A[j]==0) ]
-        # print(W[0],W[1],W[2])
+        #print(W[0],W[1],W[2])
         #print(i,"c:"+ str(sum(C)/number_of_cooperators(A)),"d:"+str(sum(D)/(len(A)-number_of_cooperators(A))))
         B = evolution(A, W)
         # print(B==A)

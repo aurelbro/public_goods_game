@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 #folder = sys.argv[1]
 
 def creation_column(r_par, mu_par, beta_par, fc_par, M_par):
-    foldername = "experiments/r=%02d_mu=%.2f_Beta=%.1f_fc=%.2f_M=%02d.tsv" % (r_par,mu_par, beta_par, fc_par, M_par)
+    foldername = "simulations_2/r=%02d_mu=%.2f_Beta=%.1f_fc=%.2f_M=%02d.tsv" % (r_par,mu_par, beta_par, fc_par, M_par)
     #print foldername
 
     complete_list = []
@@ -18,41 +18,41 @@ def creation_column(r_par, mu_par, beta_par, fc_par, M_par):
             #print file
             with open(foldername + "/" + file, "r") as file:
                 reader=csv.reader(file, delimiter='\t')
-                if (len(complete_list)<88):
-                    row=next(reader)
+                #if (len(complete_list)<88):
+                row=next(reader)
                     #for row in reader:
-                    line = map(float,row)
-                    complete_list.append(line[99999])
+                line = map(float,row)
+                complete_list.append(line[5999])
     #print(len(complete_list))
     res = np.histogram(complete_list, bins=[0,100,200,300,400,500,600,700,800,900,1000])
     #print res[0]
     return res[0]
 
 def hist(r_par, mu_par, beta_par, M_par):
-    fc_init = [0.00, 0.10, 0.30, 0.50, 0.70, 0.90, 1.00]
+    fc_init = [0.10, 0.30, 0.50, 0.70, 0.90]
     fc_final= [0,100,200,300,400,500,600,700,800,900,1000]
     hist_mat = np.zeros((10, len(fc_init)))
     for i in range(len(fc_init)):
        hist_mat[:,i]= creation_column(r_par, mu_par, beta_par, fc_init[i], M_par)
     #print hist_mat
     
-    if not os.path.exists("experiments/r=%02d_mu=%.2f_Beta=%.1f_M=%02d" % (r_par,mu_par, beta_par, M_par)):
-        os.makedirs("experiments/r=%02d_mu=%.2f_Beta=%.1f_M=%02d" % (r_par,mu_par, beta_par, M_par))
-    filename="experiments/r=%02d_mu=%.2f_Beta=%.1f_M=%02d/heatmap" % (r_par,mu_par, beta_par, M_par)
+    if not os.path.exists("simulations_2/r=%02d_mu=%.2f_Beta=%.1f_M=%02d" % (r_par,mu_par, beta_par, M_par)):
+        os.makedirs("simulations_2/r=%02d_mu=%.2f_Beta=%.1f_M=%02d" % (r_par,mu_par, beta_par, M_par))
+    filename="simulations_2/r=%02d_mu=%.2f_Beta=%.1f_M=%02d/heatmap" % (r_par,mu_par, beta_par, M_par)
     np.save(filename, hist_mat)
 
     return
 
 def plot_hist(r_par, mu_par, beta_par, M_par):
 
-    filename="experiments/r=%02d_mu=%.2f_Beta=%.1f_M=%02d/heatmap.npy" % (r_par,mu_par, beta_par, M_par)
+    filename="simulations_2/r=%02d_mu=%.2f_Beta=%.1f_M=%02d/heatmap.npy" % (r_par,mu_par, beta_par, M_par)
     hist_mat=np.load(filename)
 
 
     #sns.heatmap(hist_mat)
-    plt.matshow(hist_mat/88)
+    plt.matshow(hist_mat/20)
     axes=plt.gca()
-    axes.xaxis.set_ticklabels(['','0%', '10%', '30%', '50%', '70%', '90%', '100%'])
+    axes.xaxis.set_ticklabels(['', '10%', '30%', '50%', '70%', '90%'])
     axes.yaxis.set_ticklabels(['','0-10%', '20-30%', '40-50%', '60-70%', '80-90%'])
     axes.set_xlabel('part of cooperators at the beginning')
     axes.set_ylabel('part of cooperators at the end')
@@ -82,5 +82,5 @@ def plot_hist(r_par, mu_par, beta_par, M_par):
 #                hist(r_par, mu_par, beta_par, M_par)
 
 
-#hist(8,0.00,1.0,0)
-plot_hist(8,0.00,10.0,8)
+hist(8,0.01,10.0,0)
+plot_hist(8,0.01,10.0,0)

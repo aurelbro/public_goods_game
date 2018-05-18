@@ -7,17 +7,17 @@ Created on Fri Apr 13 15:24:07 2018
 
 Z = 1000                      # number of players
 N = 10                        # number of players per random group
-r = 14.                        # benefit
+r = 7.8                        # benefit
 c = 1                         # cost
-mu = 0.1                       # mutation rate
+mu = 0.                    # mutation rate
 Beta = 10                     # selection stength
 # number of games played before we launch the evolution process
 number_of_games = 100
 # maximum number of strategies changed during an evolution process
 nI = 5
 S = [0, 1]                    # set of strategies
-fc = 0.95
-M = 0                          # necessary threshold for the benefit being shared
+fc = 0.3
+M = 4                          # necessary threshold for the benefit being shared
 number_of_generations = 3000
 
 # importations
@@ -218,11 +218,11 @@ def main_4(A, number_of_rounds):
     W = complete_game(A)
     for i in range(number_of_rounds):
         tab[i] = number_of_cooperators(A)
-        # print(i,tab[i])
-        #C=[ W[j] for j in range(len(A)) if (A[j]==1) ]
-        #D=[ W[j] for j in range(len(A)) if (A[j]==0) ]
+        print(i,tab[i])
+        C=[ W[j] for j in range(len(A)) if (A[j]==1) ]
+        D=[ W[j] for j in range(len(A)) if (A[j]==0) ]
         # print(W[0],W[1],W[2])
-        #print(i,"c:"+ str(sum(C)/number_of_cooperators(A)),"d:"+str(sum(D)/(len(A)-number_of_cooperators(A))))
+        print(i,"c:"+ str(sum(C)/number_of_cooperators(A)),"d:"+str(sum(D)/(len(A)-number_of_cooperators(A))))
         B = evolution(A, W)
         # print(B==A)
         if (B != A):
@@ -235,9 +235,9 @@ def main_4(A, number_of_rounds):
 A = [0]*int(round(Z*(1-fc))) + [1]*int(round(Z*fc))
 
 #main_3(A, 100)
-#main_4(A, 1000)
+main_4(A, 1000)
 
-for j in range(10):
-    plt.plot(np.arange(1, number_of_generations+1),
-             main_4([0]*int(Z*(1-fc)) + [1]*int(Z*fc), number_of_generations))
-plt.show()
+#for j in range(10):
+ #   plt.plot(np.arange(1, number_of_generations+1),
+ #            main_4([0]*int(Z*(1-fc)) + [1]*int(Z*fc), number_of_generations))
+#plt.show()
