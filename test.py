@@ -11,3 +11,7 @@ import numpy as np
 B=np.array([1.,2.5,6.3,4.4])
 C=np.array([1.,2.5,6.3,4.4])
 print(B!=C)
+
+from scipy.stats import binom
+prob = binom.cdf(x, n, p)
+print(probS)
