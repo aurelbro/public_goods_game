@@ -7,7 +7,7 @@ Created on Fri Apr 13 15:24:07 2018
 
 Z = 1000                      # number of players
 N = 10                        # number of players per random group
-# r = 14.                        # benefit
+# r = 14.                     # benefit
 c = 1                         # cost
 # mu = 0.1                       # mutation rate
 # Beta = 10                     # selection stength
@@ -91,16 +91,24 @@ def complete_game(A):
         # on mélange aléatoirement groups
         np.random.shuffle(groups)
         tabel_c = [0]*number_of_groups
+        B = np.zeros(Z)
         for k in range(number_of_groups):
             # print("len(A) = %d" % len(A))
             # for l in range(N):
                 # print(groups[k*N+l]-1)
+            n=np.random.randint(N)
+            for m in range(N):
+                if (A[groups[k*N+m] - 1][1] < A[groups[k*N+n] - 1][1]):
+                    B[groups[k*N+m] - 1] = A[groups[k*N+m] - 1][0]
+                else:
+                    B[groups[k*N+m] - 1] = A[groups[k*N+n] - 1][0]
+                
             tabel_c[k] = number_of_cooperators(
-                [A[groups[k*N+l] - 1] for l in range(N)])
+                [B[groups[k*N+l] - 1] for l in range(N)])
             for j in range(N):
                 W[groups[k*N:(k+1)*N][j]-1] = W[groups[k*N:(k+1)*N][j]-1] + \
                     Payoffs[tabel_c[k]][indicator_function(
-                        A[groups[k*N+j]-1] == 0)]
+                        B[groups[k*N+j]-1] == 0)]
 
     # W, tableau des payoffs alimenté à chaque étape
     W = W/number_of_games
