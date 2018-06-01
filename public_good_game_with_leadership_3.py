@@ -7,18 +7,18 @@ Created on Fri Apr 13 15:24:07 2018
 
 Z = 1000                      # number of players
 N = 10                        # number of players per random group
-# r = 14.                     # benefit
+r = 6.                     # benefit
 c = 1                         # cost
-# mu = 0.1                       # mutation rate
-# Beta = 10                     # selection stength
+mu = 0.                       # mutation rate
+Beta = 10                     # selection stength
 # number of games played before we launch the evolution process
 number_of_games = 100
 # maximum number of strategies changed during an evolution process
 nI = 5
 S = [0, 1]                    # set of strategies
-#fc = 0.95
-# M = 0                          # necessary threshold for the benefit being shared
-number_of_generations = 10000
+fc = 0.5
+M = 0                          # necessary threshold for the benefit being shared
+number_of_generations = 1000
 
 # importations
 
@@ -29,23 +29,23 @@ import sys
 import csv
 import time
 import os
+from copy import deepcopy
+
+#def usage():
+#    print("usage : folder, r, mu, beta, fc, M")
 
 
-def usage():
-    print("usage : folder, r, mu, beta, fc, M")
+#numberOfArgs = len(sys.argv)
+#if(numberOfArgs < 7):
+#    usage()
+#    exit(-1)
 
-
-numberOfArgs = len(sys.argv)
-if(numberOfArgs < 7):
-    usage()
-    exit(-1)
-
-folder = sys.argv[1]
-r = float(sys.argv[2])
-mu = float(sys.argv[3])
-Beta = float(sys.argv[4])
-fc = float(sys.argv[5])
-M = int(sys.argv[6])
+#folder = sys.argv[1]
+#r = float(sys.argv[2])
+#mu = float(sys.argv[3])
+#Beta = float(sys.argv[4])
+#fc = float(sys.argv[5])
+#M = int(sys.argv[6])
 
 
 # auxiliary functions
@@ -217,11 +217,11 @@ def main(A, number_of_rounds):
     W = complete_game(A)
     for i in range(number_of_rounds):
         tab[i] = number_of_cooperators(A[0])
-        #print(i,tab[i])
-        #C=[ W[j] for j in range(len(A[0])) if (A[0][j]==1) ]
-        #D=[ W[j] for j in range(len(A[0])) if (A[0][j]==0) ]
+        print(i,tab[i])
+        C=[ W[j] for j in range(len(A[0])) if (A[0][j]==1) ]
+        D=[ W[j] for j in range(len(A[0])) if (A[0][j]==0) ]
         #print(W[0],W[1],W[2])
-        #print(i,"c:"+ str(sum(C)/number_of_cooperators(A[0])),"d:"+str(sum(D)/(len(A[0])-number_of_cooperators(A[0]))))
+        print(i,"c:"+ str(sum(C)/number_of_cooperators(A[0])),"d:"+str(sum(D)/(len(A[0])-number_of_cooperators(A[0]))))
         B = evolution(A, W)
         #print(B[0])
         if (B[0] != A[0]):
@@ -232,13 +232,13 @@ def main(A, number_of_rounds):
 
 A = [ [0]*int(round(Z*(1-fc))) + [1]*int(round(Z*fc)), np.random.normal(0,1,Z) ]
 a = main(A, number_of_generations)
-date = time.strftime("%Y%m%d-%H-%M-%S")
-parameters = "r=%02d_mu=%.2f_Beta=%.1f_fc=%.2f_M=%02d.tsv" % (
-    r, mu, Beta, fc, M)
-subfolder = parameters
-subfolder = folder + "/" + subfolder
-if not os.path.exists(subfolder):
-    os.mkdir(subfolder)
-with open(subfolder + "/" + date + parameters, 'w') as fhOut:
-    writer = csv.writer(fhOut, delimiter='\t', lineterminator='\n')
-    writer.writerow(a)
+#date = time.strftime("%Y%m%d-%H-%M-%S")
+#parameters = "r=%02d_mu=%.2f_Beta=%.1f_fc=%.2f_M=%02d.tsv" % (
+#    r, mu, Beta, fc, M)
+#subfolder = parameters
+#subfolder = folder + "/" + subfolder
+#if not os.path.exists(subfolder):
+#    os.mkdir(subfolder)
+#with open(subfolder + "/" + date + parameters, 'w') as fhOut:
+#    writer = csv.writer(fhOut, delimiter='\t', lineterminator='\n')
+#    writer.writerow(a)

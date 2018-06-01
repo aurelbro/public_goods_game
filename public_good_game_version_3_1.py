@@ -224,7 +224,7 @@ def main_4(A, number_of_rounds):
         # print(W[0],W[1],W[2])
         print(i,"c:"+ str(sum(C)/number_of_cooperators(A)),"d:"+str(sum(D)/(len(A)-number_of_cooperators(A))))
         B = evolution(A, W)
-        # print(B==A)
+        print(B==A)
         if (B != A):
             A = B
             W = complete_game(A)
