@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sys
 import os
-number_of_generations = 6000
+number_of_generations = 10000
 
 
 def usage():
