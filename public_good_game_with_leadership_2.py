@@ -7,10 +7,10 @@ Created on Fri Apr 13 15:24:07 2018
 
 Z = 1000                      # number of players
 N = 10                        # number of players per random group
-r = 6.                     # benefit
+r = 5.5                     # benefit
 c = 1                         # cost
 mu = 0.                       # mutation rate
-Beta = 10                     # selection stength
+Beta = 1                     # selection stength
 # number of games played before we launch the evolution process
 number_of_games = 100
 # maximum number of strategies changed during an evolution process
@@ -217,11 +217,11 @@ def main(A, number_of_rounds):
     W = complete_game(A)
     for i in range(number_of_rounds):
         tab[i] = number_of_cooperators(A[0])
-        #print(i,tab[i])
-        #C=[ W[j] for j in range(len(A[0])) if (A[0][j]==1) ]
-        #D=[ W[j] for j in range(len(A[0])) if (A[0][j]==0) ]
+        print(i,tab[i])
+        C=[ W[j] for j in range(len(A[0])) if (A[0][j]==1) ]
+        D=[ W[j] for j in range(len(A[0])) if (A[0][j]==0) ]
         #print(W[0],W[1],W[2])
-        #print(i,"c:"+ str(sum(C)/number_of_cooperators(A[0])),"d:"+str(sum(D)/(len(A[0])-number_of_cooperators(A[0]))))
+        print(i,"c:"+ str(sum(C)/number_of_cooperators(A[0])),"d:"+str(sum(D)/(len(A[0])-number_of_cooperators(A[0]))))
         B = evolution(A, W)
         #print(B[0])
         if (B[0] != A[0]):
