@@ -32,7 +32,7 @@ import os
 
 
 def usage():
-    print("usage : folder, r, mu, beta, fc, M")
+    print("usage : folder, r, mu, beta, fc, M, seed")
 
 
 numberOfArgs = len(sys.argv)
@@ -46,7 +46,10 @@ mu = float(sys.argv[3])
 Beta = float(sys.argv[4])
 fc = float(sys.argv[5])
 M = int(sys.argv[6])
+seed = int(sys.argv[7])
 
+# set the seed of the random number generator
+np.random.seed( seed+1 )
 
 # auxiliary functions
 
@@ -224,7 +227,7 @@ def main(A, number_of_rounds):
 
 A = [0]*int(round(Z*(1-fc))) + [1]*int(round(Z*fc))
 a = main(A, number_of_generations)
-date = time.strftime("%Y%m%d-%H-%M-%S")
+date = "run%04d" % seed # time.strftime("%Y%m%d-%H-%M-%S")
 parameters = "r=%02d_mu=%.2f_Beta=%.1f_fc=%.2f_M=%02d.tsv" % (
     r, mu, Beta, fc, M)
 subfolder = parameters
