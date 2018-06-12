@@ -46,10 +46,10 @@ mu = float(sys.argv[3])
 Beta = float(sys.argv[4])
 fc = float(sys.argv[5])
 M = int(sys.argv[6])
-seed = int(sys.argv[7])
+#seed = int(sys.argv[7])
 
 # set the seed of the random number generator
-np.random.seed( seed+1 )
+seed=np.random.seed( seed+1 )
 
 # auxiliary functions
 
