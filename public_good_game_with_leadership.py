@@ -18,7 +18,7 @@ nI = 5
 S = [0, 1]                    # set of strategies
 #fc = 0.95
 # M = 0                          # necessary threshold for the benefit being shared
-number_of_generations = 1000
+number_of_generations = 6000
 
 # importations
 
@@ -32,7 +32,7 @@ import os
 from copy import deepcopy
 
 def usage():
-    print("usage : folder, r, mu, beta, fc, M")
+    print("usage : folder, r, mu, beta, fc, M, run_number")
 
 
 numberOfArgs = len(sys.argv)
@@ -46,7 +46,13 @@ mu = float(sys.argv[3])
 Beta = float(sys.argv[4])
 fc = float(sys.argv[5])
 M = int(sys.argv[6])
-seed = int(sys.argv[7])
+run_number = int(sys.argv[7])
+
+#print("gotten run_number = %d" % run_number)
+# set the seed of the random number generator
+new_seed = np.random.randint(100000)
+np.random.seed(new_seed)
+# seed = np.random.randint(1,10000)
 
 # auxiliary functions
 
@@ -57,7 +63,7 @@ def indicator_function(boolean):
     return 0
 
 
-def prob_of_changing_strategy(i, j, W):
+def fermi_function(i, j, W):
     return(1./(1 + np.exp(- Beta * (W[j-1] - W[i-1]))))
 
 
@@ -79,6 +85,18 @@ def tabel_payoff(n):
 Payoffs = [tabel_payoff(n) for n in range(N+1)]
 # print(Payoffs)
 
+def values_of_fermi_function_with_strength(tab):            # calculation of all the transitions probabilities with respect to strengths
+    l=len(tab)
+    mat=[[0]*l for k in range (l)]
+    for i in range(l):
+        for j in range(l):
+            mat[i][j]= fermi_function(i, j, tab)
+    return(mat)
+
+strengths= np.random.exponential(1,Z)
+following= values_of_fermi_function_with_strength(strengths)   
+# print(Payoffs)
+
 # game simulation function
 
 
@@ -86,23 +104,26 @@ def complete_game(A):
     W = np.zeros(Z)
     number_of_groups = Z//N
     groups = [i for i in range(1, Z+1)]
-
+    coop_level_tab=[0]*number_of_games
     for i in range(number_of_games):
-        # on mélange aléatoirement groups
+        # groups is shuffled randomly
         np.random.shuffle(groups)
         tabel_c = [0]*number_of_groups
         C = [0]*Z
+    
         for k in range(number_of_groups):
             # print("len(A) = %d" % len(A))
             # for l in range(N):
                 # print(groups[k*N+l]-1)
             n=np.random.randint(N)
             for m in range(N):
-                if (A[1][groups[k*N+m] - 1] < A[1][groups[k*N+n] - 1]):
-                    C[groups[k*N+m] - 1] = A[0][groups[k*N+n] - 1]
+                #if (A[1][groups[k*N+m] - 1] < A[1][groups[k*N+n] - 1]):
+                b = np.random.random()
+                if (b < following[groups[k*N+m]-1][groups[k*N+n]-1]):            #in each group, test if m player will follow the leader
+                    C[groups[k*N+m] - 1] = A[0][groups[k*N+n] - 1]                    
                 else:
-                    C[groups[k*N+m] - 1] = A[0][groups[k*N+m] - 1]
-               
+                    C[groups[k*N+m] - 1] = A[0][groups[k*N+m] - 1]               #C:tabel of stratrgies for this round
+            coop_level_tab[i]=number_of_cooperators(C)   
             tabel_c[k] = number_of_cooperators(
                 [C[groups[k*N+l] - 1] for l in range(N)])
             for j in range(N):
@@ -112,7 +133,8 @@ def complete_game(A):
 
     # W, tableau des payoffs alimenté à chaque étape
     W = W/number_of_games
-    return W
+    coop_level= sum(coop_level_tab)/number_of_games
+    return W, coop_level      
 
 
 # evolution function
@@ -214,28 +236,33 @@ def evolution(A, W):
 def main(A, number_of_rounds):
 
     tab = np.zeros(number_of_rounds)
-    W = complete_game(A)
+    tab_coop_level= np.zeros(number_of_rounds)
+    W,coop_level = complete_game(A)
     for i in range(number_of_rounds):
         tab[i] = number_of_cooperators(A[0])
+        tab_coop_level[i]= coop_level
         #print(i,tab[i])
         #C=[ W[j] for j in range(len(A[0])) if (A[0][j]==1) ]
         #D=[ W[j] for j in range(len(A[0])) if (A[0][j]==0) ]
         #print(W[0],W[1],W[2])
         #print(i,"c:"+ str(sum(C)/number_of_cooperators(A[0])),"d:"+str(sum(D)/(len(A[0])-number_of_cooperators(A[0]))))
+        #print(i,coop_level)
         B = evolution(A, W)
         #print(B[0])
         if (B[0] != A[0]):
           A = B
-          W = complete_game(A)
-    return tab
+          W, coop_level = complete_game(A)
+    return tab, tab_coop_level
 
 
-A = [ [0]*int(round(Z*(1-fc))) + [1]*int(round(Z*fc)), np.random.normal(0,1,Z) ]
+A = [ [0]*int(round(Z*(1-fc))) + [1]*int(round(Z*fc)), strengths ]
 a = main(A, number_of_generations)
-date = "run%04d" % seed # time.strftime("%Y%m%d-%H-%M-%S")
+# date = "run%04d" % seed # time.strftime("%Y%m%d-%H-%M-%S")
+date = time.strftime("%Y%m%d-%H-%M-%S") + ("_%05d_" % new_seed)
+
 parameters = "r=%02d_mu=%.2f_Beta=%.1f_fc=%.2f_M=%02d.tsv" % (
     r, mu, Beta, fc, M)
-subfolder = parameters
+subfolder = parameters.strip(".tsv")
 subfolder = folder + "/" + subfolder
 if not os.path.exists(subfolder):
     os.mkdir(subfolder)

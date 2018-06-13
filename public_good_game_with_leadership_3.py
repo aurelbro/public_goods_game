@@ -18,7 +18,7 @@ nI = 5
 S = [0, 1]                    # set of strategies
 fc = 0.7
 M = 0                          # necessary threshold for the benefit being shared
-number_of_generations = 1000
+number_of_generations = 100
 
 # importations
 
@@ -250,6 +250,7 @@ def main(A, number_of_rounds):
 
 A = [ [0]*int(round(Z*(1-fc))) + [1]*int(round(Z*fc)), strengths ]#[0]*Z ]
 a = main(A, number_of_generations)
+print(a)
 #date = time.strftime("%Y%m%d-%H-%M-%S")
 #parameters = "r=%02d_mu=%.2f_Beta=%.1f_fc=%.2f_M=%02d.tsv" % (
 #    r, mu, Beta, fc, M)
