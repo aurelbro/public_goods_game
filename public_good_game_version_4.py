@@ -49,7 +49,8 @@ M = int(sys.argv[6])
 run_number = int(sys.argv[7])
 print("gotten run_number = %d" % run_number)
 # set the seed of the random number generator
-# np.random.seed( seed+1 )
+new_seed = np.random.randint(100000)
+np.random.seed(new_seed)
 # seed = np.random.randint(1,10000)
 # auxiliary functions
 
@@ -227,7 +228,7 @@ def main(A, number_of_rounds):
 A = [0]*int(round(Z*(1-fc))) + [1]*int(round(Z*fc))
 a = main(A, number_of_generations)
 # date = "run%04d" % seed # time.strftime("%Y%m%d-%H-%M-%S")
-date = time.strftime("%Y%m%d-%H-%M-%S") + ("_%3d_" % run_number)
+date = time.strftime("%Y%m%d-%H-%M-%S") + ("_%05d_" % new_seed)
 
 parameters = "r=%02d_mu=%.2f_Beta=%.1f_fc=%.2f_M=%02d.tsv" % (
     r, mu, Beta, fc, M)
