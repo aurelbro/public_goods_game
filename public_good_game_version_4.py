@@ -32,7 +32,7 @@ import os
 
 
 def usage():
-    print("usage : folder, r, mu, beta, fc, M, seed")
+    print("usage : folder, r, mu, beta, fc, M, run_number")
 
 
 numberOfArgs = len(sys.argv)
@@ -46,13 +46,12 @@ mu = float(sys.argv[3])
 Beta = float(sys.argv[4])
 fc = float(sys.argv[5])
 M = int(sys.argv[6])
-seed = int(sys.argv[7])
-print("gotten seed = %d", seed)
+run_number = int(sys.argv[7])
+print("gotten run_number = %d", run_number)
 # set the seed of the random number generator
-np.random.seed( seed+1 )
-seed = np.random.randint(1,10000)
+# np.random.seed( seed+1 )
+# seed = np.random.randint(1,10000)
 # auxiliary functions
-print("generated seed = %d", seed)
 
 def indicator_function(boolean):
     if (boolean):
@@ -227,7 +226,9 @@ def main(A, number_of_rounds):
 
 A = [0]*int(round(Z*(1-fc))) + [1]*int(round(Z*fc))
 a = main(A, number_of_generations)
-date = "run%04d" % seed # time.strftime("%Y%m%d-%H-%M-%S")
+# date = "run%04d" % seed # time.strftime("%Y%m%d-%H-%M-%S")
+date = time.strftime("%Y%m%d-%H-%M-%S") + "%d", run_number
+
 parameters = "r=%02d_mu=%.2f_Beta=%.1f_fc=%.2f_M=%02d.tsv" % (
     r, mu, Beta, fc, M)
 subfolder = parameters
