@@ -18,7 +18,7 @@ nI = 5
 S = [0, 1]                    # set of strategies
 #fc = 0.95
 # M = 0                          # necessary threshold for the benefit being shared
-number_of_generations =1000
+number_of_generations =10000
 
 # importations
 
@@ -46,10 +46,10 @@ mu = float(sys.argv[3])
 Beta = float(sys.argv[4])
 fc = float(sys.argv[5])
 M = int(sys.argv[6])
-#seed = int(sys.argv[7])
+seed = int(sys.argv[7])
 
 # set the seed of the random number generator
-seed=np.random.sedd()   #seed=np.random.seed( seed+1 )
+seed= np.random.seed()   #seed=np.random.seed( seed+1 )
 
 # auxiliary functions
 
