@@ -47,12 +47,12 @@ Beta = float(sys.argv[4])
 fc = float(sys.argv[5])
 M = int(sys.argv[6])
 seed = int(sys.argv[7])
-
+print("gotten seed = %d", seed)
 # set the seed of the random number generator
-seed=np.random.seed( seed+1 )
-
+np.random.seed( seed+1 )
+seed = np.random.randint(1,10000)
 # auxiliary functions
-
+print("generated seed = %d", seed)
 
 def indicator_function(boolean):
     if (boolean):
