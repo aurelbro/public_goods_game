@@ -49,7 +49,7 @@ M = int(sys.argv[6])
 seed = int(sys.argv[7])
 
 # set the seed of the random number generator
-seed= np.random.seed()   #seed=np.random.seed( seed+1 )
+seed=np.random.seed( seed+1 )
 
 # auxiliary functions
 

@@ -229,9 +229,11 @@ def evolution(A, W):
 def main(A, number_of_rounds):
 
     tab = np.zeros(number_of_rounds)
+    tab_coop_level= np.zeros(number_of_rounds)
     W,coop_level = complete_game(A)
     for i in range(number_of_rounds):
         tab[i] = number_of_cooperators(A[0])
+        tab_coop_level[i]= coop_level
         print(i,tab[i])
         #C=[ W[j] for j in range(len(A[0])) if (A[0][j]==1) ]
         #D=[ W[j] for j in range(len(A[0])) if (A[0][j]==0) ]
@@ -243,7 +245,7 @@ def main(A, number_of_rounds):
         if (B[0] != A[0]):
           A = B
           W, coop_level = complete_game(A)
-    return tab
+    return tab, tab_coop_level                                      
 
 
 A = [ [0]*int(round(Z*(1-fc))) + [1]*int(round(Z*fc)), strengths ]#[0]*Z ]
