@@ -1,6 +1,6 @@
 #!/bin/bash
 
-seed=$0
+seed=$1
 echo $seed
 mkdir simulations_4;
   for r in 3. 5. 7.; do
