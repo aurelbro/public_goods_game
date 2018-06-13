@@ -1,7 +1,7 @@
 #!/bin/bash
 
-seed=$1
-echo seed
+seed=$0
+echo $seed
 mkdir simulations_4;
   for r in 3. 5. 7.; do
     for mu in 0.0  ; do
