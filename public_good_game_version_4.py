@@ -227,7 +227,7 @@ def main(A, number_of_rounds):
 A = [0]*int(round(Z*(1-fc))) + [1]*int(round(Z*fc))
 a = main(A, number_of_generations)
 # date = "run%04d" % seed # time.strftime("%Y%m%d-%H-%M-%S")
-date = time.strftime("%Y%m%d-%H-%M-%S") + ("%d" % run_number)
+date = time.strftime("%Y%m%d-%H-%M-%S") + ("_%3d_" % run_number)
 
 parameters = "r=%02d_mu=%.2f_Beta=%.1f_fc=%.2f_M=%02d.tsv" % (
     r, mu, Beta, fc, M)
