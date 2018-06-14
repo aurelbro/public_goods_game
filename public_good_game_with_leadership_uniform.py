@@ -151,7 +151,7 @@ def evolution(A, W):
             while (j == i):
                 j = np.random.randint(1, Z+1)
             b = np.random.random()
-            if (b < prob_of_changing_strategy(i, j, W)):
+            if (b < fermi_function(i, j, W)):
                 B[0][i-1] = B[0][j-1]
 
         else:
