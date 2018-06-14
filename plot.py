@@ -30,7 +30,7 @@ for file in os.listdir(folder):
     with open(folder + "/" + file, "r") as file:
         reader = csv.reader(file, delimiter='\t')
 
-        for row in reader[0]:
+        for row in reader:
             line = map(float, row)
             plt.plot(np.arange(1, number_of_generations+1),
                      line, linestyle='-.', linewidth=0.05)
