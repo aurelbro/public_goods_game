@@ -32,7 +32,7 @@ for file in os.listdir(folder):
         reader = csv.reader(file, delimiter='\t')
         line1=csvreader.next(reader)
         #for row in reader:
-        line = map(float, line1#row)
+        line = map(float, line1)#row)
         plt.plot(np.arange(1, number_of_generations+1),
                      line, linestyle='-.', linewidth=0.05 , color="black")
         complete_list.append(line)
