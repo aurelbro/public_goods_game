@@ -38,7 +38,7 @@ for file in os.listdir(folder):
         complete_list.append(line)
         line2=csvreader.next(reader)
         #for row in reader:
-        line2= map(float, line2#row)
+        line2= map(float, line2) #row)
         plt.plot(np.arange(1, number_of_generations+1),
                      line2, linestyle='-.', linewidth=0.05 , color="red")
         complete_list_2.append(line2)
