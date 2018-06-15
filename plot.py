@@ -26,15 +26,22 @@ if (os.path.exists(folder + "/graphical_representation.pdf")):
     os.remove(folder + "/graphical_representation.pdf")
 plt.figure(figsize=(20, 10), dpi=150)
 complete_list = []
+complete_list_2 = []
 for file in os.listdir(folder):
     with open(folder + "/" + file, "r") as file:
         reader = csv.reader(file, delimiter='\t')
-        #line1=csvreader.next(reader)
-        for row in reader:
-           line = map(float, line1#row)
-           plt.plot(np.arange(1, number_of_generations+1),
-                     line, linestyle='-.', linewidth=0.05 #, color="r")
-           complete_list.append(line)
+        line1=csvreader.next(reader)
+        #for row in reader:
+        line = map(float, line1#row)
+        plt.plot(np.arange(1, number_of_generations+1),
+                     line, linestyle='-.', linewidth=0.05 , color="black")
+        complete_list.append(line)
+        line2=csvreader.next(reader)
+        #for row in reader:
+        line2= map(float, line2#row)
+        plt.plot(np.arange(1, number_of_generations+1),
+                     line2, linestyle='-.', linewidth=0.05 , color="red")
+        complete_list_2.append(line2)
     # plt.show()
 plt.title(folder.strip(".tsv"))
 plt.xlabel("Number of generations")
@@ -43,8 +50,11 @@ axes = plt.gca()
 axes.set_ylim(-10, 1010)
 mean = np.mean(np.array(complete_list), axis=0)
 print(mean)
+mean_2 = np.mean(np.array(complete_list_2), axis=0)
 plt.plot(np.arange(1, number_of_generations+1),
-         mean, 'b', linewidth=4)
+         mean, 'gray', linewidth=2)
+plt.plot(np.arange(1, number_of_generations+1),
+         mean_2, 'orangered', linewidth=2)
 plt.savefig(folder + "/graphical_representation.pdf")
 
 # np.savetxt('/home/aurelien/Documents/test.txt', a)
