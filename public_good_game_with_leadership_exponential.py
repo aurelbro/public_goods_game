@@ -268,4 +268,6 @@ if not os.path.exists(subfolder):
     os.mkdir(subfolder)
 with open(subfolder + "/" + date + parameters, 'w') as fhOut:
     writer = csv.writer(fhOut, delimiter='\t', lineterminator='\n')
-    writer.writerow(a)
+    writer.writerow(a[0])
+    writer.writerow(a[1])
+    

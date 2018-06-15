@@ -1,6 +1,6 @@
 import csv
 import matplotlib
-matplotlib.use('Agg')
+#matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
@@ -29,12 +29,12 @@ complete_list = []
 for file in os.listdir(folder):
     with open(folder + "/" + file, "r") as file:
         reader = csv.reader(file, delimiter='\t')
-
+        #line1=csvreader.next(reader)
         for row in reader:
-            line = map(float, row)
-            plt.plot(np.arange(1, number_of_generations+1),
-                     line, linestyle='-.', linewidth=0.05)
-        complete_list.append(line)
+           line = map(float, line1#row)
+           plt.plot(np.arange(1, number_of_generations+1),
+                     line, linestyle='-.', linewidth=0.05 #, color="r")
+           complete_list.append(line)
     # plt.show()
 plt.title(folder.strip(".tsv"))
 plt.xlabel("Number of generations")
