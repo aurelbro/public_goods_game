@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 #folder = sys.argv[1]
 
 def creation_column(r_par, mu_par, beta_par, fc_par, M_par):
-    foldername = "simulations_3/r=%02d_mu=%.2f_Beta=%.1f_fc=%.2f_M=%02d.tsv" % (r_par,mu_par, beta_par, fc_par, M_par)
+    foldername = "simulations_with_leadership_exponential_2/r=%02d_mu=%.2f_Beta=%.1f_fc=%.2f_M=%02d" % (r_par,mu_par, beta_par, fc_par, M_par)
     #print foldername
 
     complete_list = []
@@ -22,7 +22,7 @@ def creation_column(r_par, mu_par, beta_par, fc_par, M_par):
                 row=next(reader)
                     #for row in reader:
                 line = map(float,row)
-                complete_list.append(line[9999])
+                complete_list.append(line[5999])
     #print(len(complete_list))
     res = np.histogram(complete_list, bins=[0,100,200,300,400,500,600,700,800,900,1000])
     #print res[0]
@@ -36,16 +36,16 @@ def hist(r_par, mu_par, beta_par, M_par):
        hist_mat[:,i]= creation_column(r_par, mu_par, beta_par, fc_init[i], M_par)
     #print hist_mat
     
-    if not os.path.exists("simulations_3/r=%02d_mu=%.2f_Beta=%.1f_M=%02d" % (r_par,mu_par, beta_par, M_par)):
-        os.makedirs("simulations_3/r=%02d_mu=%.2f_Beta=%.1f_M=%02d" % (r_par,mu_par, beta_par, M_par))
-    filename="simulations_3/r=%02d_mu=%.2f_Beta=%.1f_M=%02d/heatmap" % (r_par,mu_par, beta_par, M_par)
+    if not os.path.exists("simulations_with_leadership_exponential_2/r=%02d_mu=%.2f_Beta=%.1f_M=%02d" % (r_par,mu_par, beta_par, M_par)):
+        os.makedirs("simulations_with_leadership_exponential_2/r=%02d_mu=%.2f_Beta=%.1f_M=%02d" % (r_par,mu_par, beta_par, M_par))
+    filename="simulations_with_leadership_exponential_2/r=%02d_mu=%.2f_Beta=%.1f_M=%02d/heatmap" % (r_par,mu_par, beta_par, M_par)
     np.save(filename, hist_mat)
 
     return
 
 def plot_hist(r_par, mu_par, beta_par, M_par):
 
-    filename="simulations_3/r=%02d_mu=%.2f_Beta=%.1f_M=%02d/heatmap.npy" % (r_par,mu_par, beta_par, M_par)
+    filename="simulations_with_leadership_exponential_2/r=%02d_mu=%.2f_Beta=%.1f_M=%02d/heatmap.npy" % (r_par,mu_par, beta_par, M_par)
     hist_mat=np.load(filename)
 
 
@@ -82,5 +82,5 @@ def plot_hist(r_par, mu_par, beta_par, M_par):
 #                hist(r_par, mu_par, beta_par, M_par)
 
 
-hist(8,0.01,1.0,8)
-plot_hist(8,0.01,1.0,8)
+hist(5,0.0,10.0,10)
+plot_hist(5,0.0,10.0,10)

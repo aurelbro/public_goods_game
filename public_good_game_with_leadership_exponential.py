@@ -32,7 +32,7 @@ import os
 from copy import deepcopy
 
 def usage():
-    print("usage : folder, r, mu, beta, fc, M, run_number")
+    print("usage : folder, r, mu, beta_imit, beta_follow, fc, M")
 
 
 numberOfArgs = len(sys.argv)
@@ -43,10 +43,11 @@ if(numberOfArgs < 7):
 folder = sys.argv[1]
 r = float(sys.argv[2])
 mu = float(sys.argv[3])
-Beta = float(sys.argv[4])
-fc = float(sys.argv[5])
-M = int(sys.argv[6])
-run_number = int(sys.argv[7])
+Beta_imit = float(sys.argv[4])
+Beta_follow = float(sys.argv[5])
+fc = float(sys.argv[6])
+M = int(sys.argv[7])
+#run_number = int(sys.argv[8])
 
 #print("gotten run_number = %d" % run_number)
 # set the seed of the random number generator
@@ -63,9 +64,11 @@ def indicator_function(boolean):
     return 0
 
 
-def fermi_function(i, j, W):
-    return(1./(1 + np.exp(- Beta * (W[j-1] - W[i-1]))))
+def fermi_function_imit(i, j, W):
+    return(1./(1 + np.exp(- Beta_imit * (W[j-1] - W[i-1]))))
 
+def fermi_function_follow(i, j, W):
+    return(1./(1 + np.exp(- Beta_follow * (W[j-1] - W[i-1]))))
 
 def number_of_cooperators(t):
     return(sum(t))
@@ -90,7 +93,7 @@ def values_of_fermi_function_with_strength(tab):            # calculation of all
     mat=[[0]*l for k in range (l)]
     for i in range(l):
         for j in range(l):
-            mat[i][j]= fermi_function(i, j, tab)
+            mat[i][j]= fermi_function_follow(i, j, tab)
     return(mat)
 
 strengths= np.random.exponential(1,Z)
@@ -261,7 +264,7 @@ a = main(A, number_of_generations)
 date = time.strftime("%Y%m%d-%H-%M-%S") + ("_%05d_" % new_seed)
 
 parameters = "r=%02d_mu=%.2f_Beta=%.1f_fc=%.2f_M=%02d.tsv" % (
-    r, mu, Beta, fc, M)
+    r, mu, Beta_imit, Beta_follow, fc, M)
 subfolder = parameters.strip(".tsv")
 subfolder = folder + "/" + subfolder
 if not os.path.exists(subfolder):
