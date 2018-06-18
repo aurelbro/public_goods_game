@@ -32,19 +32,19 @@ for folder in os.listdir(folder_1):
     for file in os.listdir(folder_1 + "/" + folder):
         with open(folder_1 + "/" + folder + "/" + file, "r") as file:
             reader = csv.reader(file, delimiter='\t')
-            line1=csvreader.next(reader)
+            line1=reader.next()#reader)
         #for row in reader:
             line = map(float, line1)#row)
             plt.plot(np.arange(1, number_of_generations+1),
-                     line, linestyle='-.', linewidth=0.05 , color="gray")
+                     line, linestyle='-.', linewidth=0.05 , color="red")
             complete_list.append(line)
-            line2=csvreader.next(reader)
+            line2=reader.next() #reader)
         #for row in reader:
             line2= map(float, line2) #row)
-            plt.plot(np.arange(1, number_of_generations+1),
-                     line2, linestyle='-.', linewidth=0.05 , color="orangered")
-            complete_list_2.append(line2)
-            # plt.show()
+        plt.plot(np.arange(1, number_of_generations+1),
+                     line2, linestyle='-.', linewidth=0.05 , color="fuchsia")
+        complete_list_2.append(line2)
+    # plt.show()
     plt.title(folder.strip(".tsv"))
     plt.xlabel("Number of generations")
     plt.ylabel("Number of cooperators")
@@ -54,9 +54,9 @@ for folder in os.listdir(folder_1):
     # print(mean)
     mean_2 = np.mean(np.array(complete_list_2), axis=0)
     plt.plot(np.arange(1, number_of_generations+1),
-             mean, 'black', linewidth=2)
+         mean, 'black', linewidth=4)
     plt.plot(np.arange(1, number_of_generations+1),
-         mean_2, 'red', linewidth=2)
+         mean_2, 'blue', linewidth=4)
     plt.savefig(folder_1 + "/" + folder +
                 "/graphical_representation.pdf")
     plt.close()
