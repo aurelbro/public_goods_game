@@ -36,7 +36,7 @@ def usage():
 
 
 numberOfArgs = len(sys.argv)
-if(numberOfArgs < 7):
+if(numberOfArgs < 8):
     usage()
     exit(-1)
 
@@ -47,7 +47,7 @@ Beta_imit = float(sys.argv[4])
 Beta_follow = float(sys.argv[5])
 fc = float(sys.argv[6])
 M = int(sys.argv[7])
-#run_number = int(sys.argv[8])
+run_number = int(sys.argv[8])
 
 #print("gotten run_number = %d" % run_number)
 # set the seed of the random number generator
@@ -237,15 +237,15 @@ def main(A, number_of_rounds):
     tab = np.zeros(number_of_rounds)
     tab_coop_level= np.zeros(number_of_rounds)
     t=[0,0.2,0.6,1.0,1.5]
-    len=len(t)
-    count= [[0]*len for k in range (number_of_rounds)]
+    le=len(t)
+    count= [[0]*le for k in range (number_of_rounds)]
     W= complete_game(A)
     for i in range(number_of_rounds):
-        for l in range(len-1):
+        for l in range(le-1):
             for j in range(Z):
                 if (t[l]<= A[1][j]<=t[l+1]):
                   count[i][l]+=1
-        count[i][len-1]= Z- sum( count[i][k] for k in range(len-1) )
+        count[i][le-1]= Z- sum( count[i][k] for k in range(le-1) )
         #tab[i] = number_of_cooperators(A[0])
         #tab_coop_level[i]= coop_level
         #print(i,tab[i])

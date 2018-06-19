@@ -9,7 +9,7 @@ mkdir simulations_with_leadership_exponential_advanced/;
         for Beta_follow in 0.1 1. ; do
           for fc in 0.1 0.3 0.5 0.7 0.9; do
             for M in 0 4 10; do
-                python public_good_game_with_leadership_exponential_advanced.py simulations_with_leadership_exponential_advanced/ $r $mu $Beta $fc $M $seed
+                python public_good_game_with_leadership_exponential_advanced.py simulations_with_leadership_exponential_advanced/ $r $mu $Beta_imit $Beta_follow $fc $M $seed
             done
           done
         done
