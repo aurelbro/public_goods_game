@@ -10,13 +10,14 @@ N = 10                        # number of players per random group
 # r = 14.                     # benefit
 c = 1                         # cost
 # mu = 0.1                       # mutation rate
-# Beta = 10                     # selection stength
+# Beta_imit = 10.
+# Beta_follow = 1.                    # selection stength
 # number of games played before we launch the evolution process
 number_of_games = 100
 # maximum number of strategies changed during an evolution process
 nI = 5
 S = [0, 1]                    # set of strategies
-#fc = 0.95
+# fc = 0.95
 # M = 0                          # necessary threshold for the benefit being shared
 number_of_generations = 6000
 
@@ -245,7 +246,7 @@ def main(A, number_of_rounds):
             for j in range(Z):
                 if (t[l]<= A[1][j]<=t[l+1]):
                   count[i][l]+=1
-        count[i][len-1]= Z- sum( count[i][k] for k in range(le-1) )
+        count[i][le-1]= Z- sum( count[i][k] for k in range(le-1) )
         #tab[i] = number_of_cooperators(A[0])
         #tab_coop_level[i]= coop_level
         #print(i,tab[i])
