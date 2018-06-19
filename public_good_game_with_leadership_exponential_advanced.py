@@ -107,26 +107,23 @@ def complete_game(A):
     W = np.zeros(Z)
     number_of_groups = Z//N
     groups = [i for i in range(1, Z+1)]
-    coop_level_tab=[0]*number_of_games
+
     for i in range(number_of_games):
-        # groups is shuffled randomly
+        # on mélange aléatoirement groups
         np.random.shuffle(groups)
         tabel_c = [0]*number_of_groups
         C = [0]*Z
-    
         for k in range(number_of_groups):
             # print("len(A) = %d" % len(A))
             # for l in range(N):
                 # print(groups[k*N+l]-1)
             n=np.random.randint(N)
             for m in range(N):
-                #if (A[1][groups[k*N+m] - 1] < A[1][groups[k*N+n] - 1]):
-                b = np.random.random()
-                if (b < following[groups[k*N+m]-1][groups[k*N+n]-1]):            #in each group, test if m player will follow the leader
-                    C[groups[k*N+m] - 1] = A[0][groups[k*N+n] - 1]                    
+                if (A[1][groups[k*N+m] - 1] < A[1][groups[k*N+n] - 1]):
+                    C[groups[k*N+m] - 1] = A[0][groups[k*N+n] - 1]
                 else:
-                    C[groups[k*N+m] - 1] = A[0][groups[k*N+m] - 1]               #C:tabel of stratrgies for this round
-            coop_level_tab[i]=number_of_cooperators(C)   
+                    C[groups[k*N+m] - 1] = A[0][groups[k*N+m] - 1]
+               
             tabel_c[k] = number_of_cooperators(
                 [C[groups[k*N+l] - 1] for l in range(N)])
             for j in range(N):
@@ -136,8 +133,7 @@ def complete_game(A):
 
     # W, tableau des payoffs alimenté à chaque étape
     W = W/number_of_games
-    coop_level= sum(coop_level_tab)/number_of_games
-    return W, coop_level      
+    return W
 
 
 # evolution function
@@ -154,7 +150,7 @@ def evolution(A, W):
             while (j == i):
                 j = np.random.randint(1, Z+1)
             b = np.random.random()
-            if (b < fermi_function(i, j, W)):
+            if (b < fermi_function_imit(i, j, W)):
                 B[0][i-1] = B[0][j-1]
 
         else:
@@ -240,10 +236,18 @@ def main(A, number_of_rounds):
 
     tab = np.zeros(number_of_rounds)
     tab_coop_level= np.zeros(number_of_rounds)
-    W,coop_level = complete_game(A)
+    t=[0,0.2,0.6,1.0,1.5]
+    len=len(t)
+    count= [[0]*len for k in range (number_of_rounds)]
+    W= complete_game(A)
     for i in range(number_of_rounds):
-        tab[i] = number_of_cooperators(A[0])
-        tab_coop_level[i]= coop_level
+        for l in range(len-1):
+            for j in range(Z):
+                if (t[l]<= A[1][j]<=t[l+1]):
+                  count[i][l]+=1
+        count[i][len-1]= Z- sum( count[i]][k] for k in range(len-1) )
+        #tab[i] = number_of_cooperators(A[0])
+        #tab_coop_level[i]= coop_level
         #print(i,tab[i])
         #C=[ W[j] for j in range(len(A[0])) if (A[0][j]==1) ]
         #D=[ W[j] for j in range(len(A[0])) if (A[0][j]==0) ]
@@ -254,8 +258,38 @@ def main(A, number_of_rounds):
         #print(B[0])
         if (B[0] != A[0]):
           A = B
-          W, coop_level = complete_game(A)
-    return tab, tab_coop_level
+          W = complete_game(A)
+    return count
+
+
+# Add of the cooperation level with respect to the strength throughout generations.
+
+#def count_with_strength(strengths, number_of_generations):
+#  t=[0,0.2,0.6,1.0,1.5]
+#  len=len(t)
+#  count= [[0]*len for k in range (number_of_generations)]
+#  for l in range(number_of_generations):
+#      for i in range(len-1):
+#          for j in range(Z):
+#              if (t[i]<=  strengths[j]<=t[i+1]):
+#                  count[l][i]+=1
+#      count[l][len-1]= Z- sum( count[l][k] for k in range(len-1) )
+#  return count
+
+#def matrix_for_heatmap(strengths, number_of_generations):
+#    count= count_with_strength(strengths, number_of_generations)
+#    mat= [[0]*len for k in range (number_of_generations/100)]
+#    for l in range(number_of_generations/100):
+#      for i in range(len-1):
+#          mat[l][i]= sum(count[k][i] for k in range(100*l,100*(l+1)))
+#    return mat                               # mat contains the values for the heatmap
+
+
+
+
+
+
+
 
 
 A = [ [0]*int(round(Z*(1-fc))) + [1]*int(round(Z*fc)), strengths ]
@@ -271,6 +305,6 @@ if not os.path.exists(subfolder):
     os.mkdir(subfolder)
 with open(subfolder + "/" + date + parameters, 'w') as fhOut:
     writer = csv.writer(fhOut, delimiter='\t', lineterminator='\n')
-    writer.writerow(a[0])
-    writer.writerow(a[1])
+    writer.writerow(a)
+#    writer.writerow(a[1])
     
