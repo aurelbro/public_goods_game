@@ -47,7 +47,7 @@ Beta_imit = float(sys.argv[4])
 Beta_follow = float(sys.argv[5])
 fc = float(sys.argv[6])
 M = int(sys.argv[7])
-run_number = int(sys.argv[8])
+#run_number = int(sys.argv[8])
 
 #print("gotten run_number = %d" % run_number)
 # set the seed of the random number generator
@@ -237,15 +237,15 @@ def main(A, number_of_rounds):
     tab = np.zeros(number_of_rounds)
     tab_coop_level= np.zeros(number_of_rounds)
     t=[0,0.2,0.6,1.0,1.5]
-    le=len(t)
-    count= [[0]*le for k in range (number_of_rounds)]
+    len=len(t)
+    count= [[0]*len for k in range (number_of_rounds)]
     W= complete_game(A)
     for i in range(number_of_rounds):
-        for l in range(le-1):
+        for l in range(len-1):
             for j in range(Z):
                 if (t[l]<= A[1][j]<=t[l+1]):
                   count[i][l]+=1
-        count[i][le-1]= Z- sum( count[i][k] for k in range(le-1) )
+        count[i][len-1]= Z- sum( count[i]][k] for k in range(len-1) )
         #tab[i] = number_of_cooperators(A[0])
         #tab_coop_level[i]= coop_level
         #print(i,tab[i])
@@ -297,7 +297,7 @@ a = main(A, number_of_generations)
 # date = "run%04d" % seed # time.strftime("%Y%m%d-%H-%M-%S")
 date = time.strftime("%Y%m%d-%H-%M-%S") + ("_%05d_" % new_seed)
 
-parameters = "r=%02d_mu=%.2f_Beta=%.1f_fc=%.2f_M=%02d.tsv" % (
+parameters = "r=%02d_mu=%.2f_Beta_imit=%.1f_Beta_follow=%.1f_fc=%.2f_M=%02d.tsv" % (
     r, mu, Beta_imit, Beta_follow, fc, M)
 subfolder = parameters.strip(".tsv")
 subfolder = folder + "/" + subfolder
