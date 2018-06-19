@@ -36,7 +36,7 @@ def usage():
 
 
 numberOfArgs = len(sys.argv)
-if(numberOfArgs < 8):
+if(numberOfArgs < 7):
     usage()
     exit(-1)
 
