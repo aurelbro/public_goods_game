@@ -245,7 +245,7 @@ def main(A, number_of_rounds):
             for j in range(Z):
                 if (t[l]<= A[1][j]<=t[l+1]):
                   count[i][l]+=1
-        count[i][len-1]= Z- sum( count[i]][k] for k in range(len-1) )
+        count[i][len-1]= Z- sum( count[i][k] for k in range(len-1) )
         #tab[i] = number_of_cooperators(A[0])
         #tab_coop_level[i]= coop_level
         #print(i,tab[i])
