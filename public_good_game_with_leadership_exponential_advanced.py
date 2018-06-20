@@ -120,8 +120,9 @@ def complete_game(A):
                 # print(groups[k*N+l]-1)
             n=np.random.randint(N)
             for m in range(N):
-                if (A[1][groups[k*N+m] - 1] < A[1][groups[k*N+n] - 1]):
-                    C[groups[k*N+m] - 1] = A[0][groups[k*N+n] - 1]
+                b = np.random.random()
+                if (b < following[groups[k*N+m]-1][groups[k*N+n]-1]):            #in each group, test if m player will follow the leader
+                    C[groups[k*N+m] - 1] = A[0][groups[k*N+n] - 1]                    
                 else:
                     C[groups[k*N+m] - 1] = A[0][groups[k*N+m] - 1]
                
@@ -235,8 +236,8 @@ def evolution(A, W):
 
 def main(A, number_of_rounds):
 
-    tab = np.zeros(number_of_rounds)
-    tab_coop_level= np.zeros(number_of_rounds)
+    #tab = np.zeros(number_of_rounds)
+    #tab_coop_level= np.zeros(number_of_rounds)
     t=[0,0.2,0.6,1.0,1.5]
     le=len(t)
     count= [[0]*le for k in range (number_of_rounds)]
@@ -245,7 +246,7 @@ def main(A, number_of_rounds):
         for l in range(le-1):
             for j in range(Z):
                 if (t[l]<= A[1][j]<=t[l+1]):
-                  count[i][l]+=1
+                   count[i][l]+=1
         count[i][le-1]= Z- sum( count[i][k] for k in range(le-1) )
         #tab[i] = number_of_cooperators(A[0])
         #tab_coop_level[i]= coop_level
