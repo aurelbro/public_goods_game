@@ -54,7 +54,7 @@ run_number = int(sys.argv[8])
 # set the seed of the random number generator
 new_seed = np.random.randint(100000)
 np.random.seed(new_seed)
-# seed = np.random.randint(1,10000)
+#seed = np.random.randint(1,10000)
 
 # auxiliary functions
 
@@ -304,7 +304,7 @@ def main(A, number_of_rounds):
 A = [ [0]*int(round(Z*(1-fc))) + [1]*int(round(Z*fc)), strengths ]
 a = main(A, number_of_generations)
 #print(a[0], a[1], a[2])
-date = "run%04d" % seed # time.strftime("%Y%m%d-%H-%M-%S")
+#date = "run%04d" % seed # time.strftime("%Y%m%d-%H-%M-%S")
 date = time.strftime("%Y%m%d-%H-%M-%S") + ("_%05d_" % new_seed)
 
 parameters = "r=%02d_mu=%.2f_Beta_imit=%.1f_Beta_follow=%.1f_fc=%.2f_M=%02d.tsv" % (
