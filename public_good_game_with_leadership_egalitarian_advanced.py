@@ -7,18 +7,18 @@ Created on Fri Apr 13 15:24:07 2018
 
 Z = 1000                      # number of players
 N = 10                        # number of players per random group
-#r = 14.                     # benefit
+# r = 14.                     # benefit
 c = 1                         # cost
-#mu = 0.1                       # mutation rate
-#Beta_imit = 10.
-#Beta_follow = 1.                    # selection stength
-#number of games played before we launch the evolution process
+# mu = 0.1                       # mutation rate
+# Beta_imit = 10.
+# Beta_follow = 1.                    # selection stength
+# number of games played before we launch the evolution process
 number_of_games = 100
-#maximum number of strategies changed during an evolution process
+# maximum number of strategies changed during an evolution process
 nI = 5
 S = [0, 1]                    # set of strategies
-#fc = 0.5
-#M = 0                          # necessary threshold for the benefit being shared
+# fc = 0.95
+# M = 0                          # necessary threshold for the benefit being shared
 number_of_generations = 6000
 
 # importations
@@ -97,7 +97,7 @@ def values_of_fermi_function_with_strength(tab):            # calculation of all
             mat[i][j]= fermi_function_follow(i, j, tab)
     return(mat)
 
-strengths= np.random.exponential(1,Z)
+strengths= np.zeros(Z)
 following= values_of_fermi_function_with_strength(strengths)   
 # print(Payoffs)
 
@@ -238,23 +238,16 @@ def main(A, number_of_rounds):
 
     #tab = np.zeros(number_of_rounds)
     #tab_coop_level= np.zeros(number_of_rounds)
-    t=[0,0.2,0.6,1.0,1.5]
+    t=[0,0.2,0.5,0.9,1.5]
     le=len(t)
-    count_c= np.zeros((number_of_rounds, le))
-    count= np.zeros((number_of_rounds, le))
+    count= [[0]*le for k in range (number_of_rounds)]
     W= complete_game(A)
     for i in range(number_of_rounds):
         for l in range(le-1):
             for j in range(Z):
                 if (t[l]<= A[1][j]<=t[l+1]):
-                    count[i][l]+=1
-                    if (A[0][j]==1):
-                      count_c[i][l]+=1
+                   count[i][l]+=1
         count[i][le-1]= Z- sum( count[i][k] for k in range(le-1) )
-        for j in range(Z):
-            if (A[1][j]>t[le-1]):
-                if (A[0][j]==1):
-                  count_c[i][le-1]+=1
         #tab[i] = number_of_cooperators(A[0])
         #tab_coop_level[i]= coop_level
         #print(i,tab[i])
@@ -264,11 +257,11 @@ def main(A, number_of_rounds):
         #print(i,"c:"+ str(sum(C)/number_of_cooperators(A[0])),"d:"+str(sum(D)/(len(A[0])-number_of_cooperators(A[0]))))
         #print(i,coop_level)
         B = evolution(A, W)
-        #print(B[0]!= A[0])
+        #print(B[0])
         if (B[0] != A[0]):
           A = B
           W = complete_game(A)
-    return count_c/count
+    return count
 
 
 # Add of the cooperation level with respect to the strength throughout generations.
@@ -303,18 +296,16 @@ def main(A, number_of_rounds):
 
 A = [ [0]*int(round(Z*(1-fc))) + [1]*int(round(Z*fc)), strengths ]
 a = main(A, number_of_generations)
-print(a[0], a[1], a[2])
 # date = "run%04d" % seed # time.strftime("%Y%m%d-%H-%M-%S")
-#date = time.strftime("%Y%m%d-%H-%M-%S") + ("_%05d_" % new_seed)
+date = time.strftime("%Y%m%d-%H-%M-%S") + ("_%05d_" % new_seed)
 
-#parameters = "r=%02d_mu=%.2f_Beta_imit=%.1f_Beta_follow=%.1f_fc=%.2f_M=%02d.tsv" % (
-#    r, mu, Beta_imit, Beta_follow, fc, M)
-#subfolder = parameters.strip(".tsv")
-#subfolder = folder + "/" + subfolder
-#if not os.path.exists(subfolder):
-#    os.mkdir(subfolder)
-#with open(subfolder + "/" + date + parameters, 'w') as fhOut:
-#    writer = csv.writer(fhOut, delimiter='\t', lineterminator='\n')
-#    writer.writerow(a)
+parameters = "r=%02d_mu=%.2f_Beta_imit=%.1f_Beta_follow=%.1f_fc=%.2f_M=%02d.tsv" % (
+    r, mu, Beta_imit, Beta_follow, fc, M)
+subfolder = parameters.strip(".tsv")
+subfolder = folder + "/" + subfolder
+if not os.path.exists(subfolder):
+    os.mkdir(subfolder)
+with open(subfolder + "/" + date + parameters, 'w') as fhOut:
+    writer = csv.writer(fhOut, delimiter='\t', lineterminator='\n')
+    writer.writerow(a)
 #    writer.writerow(a[1])
-    
