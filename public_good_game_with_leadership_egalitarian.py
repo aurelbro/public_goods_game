@@ -263,7 +263,7 @@ a = main(A, number_of_generations)
 # date = "run%04d" % seed # time.strftime("%Y%m%d-%H-%M-%S")
 date = time.strftime("%Y%m%d-%H-%M-%S") + ("_%05d_" % new_seed)
 
-parameters = "r=%02d_mu=%.2f_Beta_imit=%.1_Beta_follow=%.1f_fc=%.2f_M=%02d.tsv" % (
+parameters = "r=%02d_mu=%.2f_Beta_imit=%.1f_Beta_follow=%.1f_fc=%.2f_M=%02d.tsv" % (
     r, mu, Beta_imit, Beta_follow, fc, M)
 subfolder = parameters.strip(".tsv")
 subfolder = folder + "/" + subfolder
