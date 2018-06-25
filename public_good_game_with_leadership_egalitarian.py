@@ -47,7 +47,7 @@ Beta_imit = float(sys.argv[4])
 Beta_follow = float(sys.argv[5])
 fc = float(sys.argv[6])
 M = int(sys.argv[7])
-#run_number = int(sys.argv[8])
+run_number = int(sys.argv[8])
 
 #print("gotten run_number = %d" % run_number)
 # set the seed of the random number generator
