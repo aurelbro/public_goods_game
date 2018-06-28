@@ -16,7 +16,7 @@ number_of_games = 100
 # maximum number of strategies changed during an evolution process
 nI = 5
 S = [0, 1]                    # set of strategies
-#fc = 0.95
+# fc = 0.95
 # M = 0                          # necessary threshold for the benefit being shared
 number_of_generations = 6000
 
@@ -154,7 +154,7 @@ def evolution(A, W):
             while (j == i):
                 j = np.random.randint(1, Z+1)
             b = np.random.random()
-            if (b < fermi_function(i, j, W)):
+            if (b < fermi_function_imit(i, j, W)):
                 B[0][i-1] = B[0][j-1]
 
         else:
@@ -263,7 +263,7 @@ a = main(A, number_of_generations)
 # date = "run%04d" % seed # time.strftime("%Y%m%d-%H-%M-%S")
 date = time.strftime("%Y%m%d-%H-%M-%S") + ("_%05d_" % new_seed)
 
-parameters = "r=%02d_mu=%.2f_Beta=%.1f_fc=%.2f_M=%02d.tsv" % (
+parameters = "r=%02d_mu=%.2f_Beta_imit=%.1f_Beta_follow=%.1f_fc=%.2f_M=%02d.tsv" % (
     r, mu, Beta_imit, Beta_follow, fc, M)
 subfolder = parameters.strip(".tsv")
 subfolder = folder + "/" + subfolder

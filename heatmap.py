@@ -95,8 +95,9 @@ def heatmap(r_par, mu_par, beta_imit, beta_follow, fc_par, M_par):
     axes.set_ylabel('strength interval')
     axes.xaxis.set_label_position('bottom')
     axes.xaxis.set_ticks_position('bottom')
+    plt.clim(0.5,1)
     plt.title("r="+str(r_par)+" mu="+str(mu_par)+" Beta_imit="+str(beta_imit)+" Beta_follow="+str(beta_follow)+" fc="+str(fc_par)+" M="+str(M_par))
     plt.colorbar()
     plt.show()
 
-heatmap(7,0.00,10.0,1.0,0.70,10)
+heatmap(5,0.00,10.0,1.,0.70,4)
