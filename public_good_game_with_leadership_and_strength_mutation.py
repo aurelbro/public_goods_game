@@ -7,17 +7,17 @@ Created on Fri Apr 13 15:24:07 2018
 
 Z = 1000                      # number of players
 N = 10                        # number of players per random group
-r = 5.5                     # benefit
+r = 4.5                     # benefit
 c = 1                         # cost
-mu = 0.                       # mutation rate
-Beta_imit = 10.                     # selection stength
+mu = 0.1                       # mutation rate
+Beta_imit = 10                     # selection stength
 Beta_follow=1.0
 # number of games played before we launch the evolution process
 number_of_games = 100
 # maximum number of strategies changed during an evolution process
 nI = 5
 S = [0, 1]                    # set of strategies
-fc = 0.6
+fc = 0.5
 M = 0                          # necessary threshold for the benefit being shared
 number_of_generations = 6000
 
@@ -97,7 +97,7 @@ def values_of_fermi_function_with_strength(tab):            # calculation of all
             mat[i][j]= fermi_function_follow(i, j, tab)
     return(mat)
 
-strengths= np.zeros(Z)
+strengths= np.random.exponential(1,Z)
 following= values_of_fermi_function_with_strength(strengths)   
 # print(Payoffs)
 
@@ -157,12 +157,13 @@ def evolution(A, W):
             b = np.random.random()
             if (b < fermi_function_imit(i, j, W)):
                 B[0][i-1] = B[0][j-1]
-
+                B[1][i-1] = B[1][i-1] 
         else:
             i = np.random.randint(1, Z+1)
             mutation = np.random.randint(1, l+1)
             B[0][i-1] = S[mutation - 1]
-
+            j = np.random.randint(1, Z+1)
+            B[1][i-1] = strengths[j-1]
     return(B)
 
 
@@ -246,10 +247,10 @@ def main(A, number_of_rounds):
         tab[i] = number_of_cooperators(A[0])
         tab_coop_level[i]= coop_level
         print(i,tab[i])
-        C=[ W[j] for j in range(len(A[0])) if (A[0][j]==1) ]
-        D=[ W[j] for j in range(len(A[0])) if (A[0][j]==0) ]
+        #C=[ W[j] for j in range(len(A[0])) if (A[0][j]==1) ]
+        #D=[ W[j] for j in range(len(A[0])) if (A[0][j]==0) ]
         #print(W[0],W[1],W[2])
-        print(i,"c:"+ str(sum(C)/number_of_cooperators(A[0])),"d:"+str(sum(D)/(len(A[0])-number_of_cooperators(A[0]))))
+        #print(i,"c:"+ str(sum(C)/number_of_cooperators(A[0])),"d:"+str(sum(D)/(len(A[0])-number_of_cooperators(A[0]))))
         #print(i,coop_level)
         B = evolution(A, W)
         #print(B[0])
