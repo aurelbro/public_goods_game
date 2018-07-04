@@ -8,14 +8,14 @@ import matplotlib.pyplot as plt
 
 #folder = sys.argv[1]
 
-def creation_column(r_par, mu_par, beta_par, fc_par, M_par):
-    foldername = "simulations_with_leadership_exponential_2/r=%02d_mu=%.2f_Beta=%.1f_fc=%.2f_M=%02d" % (r_par,mu_par, beta_par, fc_par, M_par)
+def creation_column(r_par, mu_par, beta_imit, beta_follow, fc_par, M_par):
+    foldername = "simulations_with_leadership_egalitarian/r=%02d_mu=%.2f_Beta_imit=%.1f_Beta_follow=%.1f_fc=%.2f_M=%02d" % (r_par,mu_par, beta_imit, beta_follow, fc_par, M_par)
     #print foldername
 
     complete_list = []
     for file in os.listdir(foldername):
         if file.endswith(".tsv"):
-            #print file
+            # print file
             with open(foldername + "/" + file, "r") as file:
                 reader=csv.reader(file, delimiter='\t')
                 #if (len(complete_list)<88):
@@ -28,29 +28,29 @@ def creation_column(r_par, mu_par, beta_par, fc_par, M_par):
     #print res[0]
     return res[0]
 
-def hist(r_par, mu_par, beta_par, M_par):
+def hist(r_par, mu_par, beta_imit, beta_follow, M_par):
     fc_init = [0.10, 0.30, 0.50, 0.70, 0.90]
     fc_final= [0,100,200,300,400,500,600,700,800,900,1000]
     hist_mat = np.zeros((10, len(fc_init)))
     for i in range(len(fc_init)):
-       hist_mat[:,i]= creation_column(r_par, mu_par, beta_par, fc_init[i], M_par)
+       hist_mat[:,i]= creation_column(r_par, mu_par, beta_imit, beta_follow, fc_init[i], M_par)
     #print hist_mat
     
-    if not os.path.exists("simulations_with_leadership_exponential_2/r=%02d_mu=%.2f_Beta=%.1f_M=%02d" % (r_par,mu_par, beta_par, M_par)):
-        os.makedirs("simulations_with_leadership_exponential_2/r=%02d_mu=%.2f_Beta=%.1f_M=%02d" % (r_par,mu_par, beta_par, M_par))
-    filename="simulations_with_leadership_exponential_2/r=%02d_mu=%.2f_Beta=%.1f_M=%02d/heatmap" % (r_par,mu_par, beta_par, M_par)
+    if not os.path.exists("simulations_with_leadership_egalitarian/r=%02d_mu=%.2f_Beta_imit=%.1f_Beta_follow=%.1f_M=%02d" % (r_par, mu_par, beta_imit, beta_follow, M_par)):
+        os.makedirs("simulations_with_leadership_egalitarian/r=%02d_mu=%.2f_Beta_imit=%.1f_Beta_follow=%.1f_M=%02d" % (r_par, mu_par, beta_imit, beta_follow, M_par))
+    filename="simulations_with_leadership_egalitarian/r=%02d_mu=%.2f_Beta_imit=%.1f_Beta_follow=%.1f_M=%02d/heatmap" % (r_par, mu_par, beta_imit, beta_follow, M_par)
     np.save(filename, hist_mat)
 
     return
 
-def plot_hist(r_par, mu_par, beta_par, M_par):
+def plot_hist(r_par, mu_par, beta_imit, beta_follow, M_par):
 
-    filename="simulations_with_leadership_exponential_2/r=%02d_mu=%.2f_Beta=%.1f_M=%02d/heatmap.npy" % (r_par,mu_par, beta_par, M_par)
+    filename="simulations_with_leadership_egalitarian/r=%02d_mu=%.2f_Beta_imit=%.1f_Beta_follow=%.1f_M=%02d/heatmap.npy" % (r_par, mu_par, beta_imit, beta_follow, M_par)
     hist_mat=np.load(filename)
 
 
     #sns.heatmap(hist_mat)
-    plt.matshow(hist_mat/20)
+    plt.matshow(hist_mat/10)
     axes=plt.gca()
     axes.xaxis.set_ticklabels(['', '10%', '30%', '50%', '70%', '90%'])
     axes.yaxis.set_ticklabels(['','0-10%', '20-30%', '40-50%', '60-70%', '80-90%'])
@@ -58,7 +58,7 @@ def plot_hist(r_par, mu_par, beta_par, M_par):
     axes.set_ylabel('part of cooperators at the end')
     axes.xaxis.set_label_position('bottom')
     axes.xaxis.set_ticks_position('bottom')
-    plt.title("r="+str(r_par)+" mu="+str(mu_par)+" Beta="+str(beta_par)+" M="+str(M_par))
+    plt.title("r="+str(r_par)+" mu="+str(mu_par)+" Beta_imit="+str(beta_imit)+" Beta_follow="+str(beta_follow)+" M="+str(M_par))
     plt.colorbar()
     plt.show()
     #H, xedges, yedges = np.histogram2d( x, y, bins=[[-0.0,0.05,0.2,0.4,0.6,0.8,0.95,1.01],10])
@@ -82,5 +82,5 @@ def plot_hist(r_par, mu_par, beta_par, M_par):
 #                hist(r_par, mu_par, beta_par, M_par)
 
 
-hist(5,0.0,10.0,10)
-plot_hist(5,0.0,10.0,10)
+hist(5,0.0,10.0,0.1,10)
+plot_hist(5,0.0,10.0,0.1,10)

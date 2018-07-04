@@ -7,17 +7,18 @@ Created on Fri Apr 13 15:24:07 2018
 
 Z = 1000                      # number of players
 N = 10                        # number of players per random group
-# r = 14.                     # benefit
+r = 5.5                     # benefit
 c = 1                         # cost
-# mu = 0.1                       # mutation rate
-# Beta = 10                     # selection stength
+mu = 0.                       # mutation rate
+Beta_imit = 10.                     # selection stength
+Beta_follow=1.0
 # number of games played before we launch the evolution process
 number_of_games = 100
 # maximum number of strategies changed during an evolution process
 nI = 5
 S = [0, 1]                    # set of strategies
-#fc = 0.95
-# M = 0                          # necessary threshold for the benefit being shared
+fc = 0.6
+M = 0                          # necessary threshold for the benefit being shared
 number_of_generations = 6000
 
 # importations
@@ -31,29 +32,29 @@ import time
 import os
 from copy import deepcopy
 
-def usage():
-    print("usage : folder, r, mu, beta_imit, beta_follow, fc, M")
+#def usage():
+#    print("usage : folder, r, mu, beta_imit, beta_follow, fc, M")
 
 
-numberOfArgs = len(sys.argv)
-if(numberOfArgs < 8):
-    usage()
-    exit(-1)
+#numberOfArgs = len(sys.argv)
+#if(numberOfArgs < 8):
+#    usage()
+#    exit(-1)
 
-folder = sys.argv[1]
-r = float(sys.argv[2])
-mu = float(sys.argv[3])
-Beta_imit = float(sys.argv[4])
-Beta_follow = float(sys.argv[5])
-fc = float(sys.argv[6])
-M = int(sys.argv[7])
-run_number = int(sys.argv[8])
+#folder = sys.argv[1]
+#r = float(sys.argv[2])
+#mu = float(sys.argv[3])
+#Beta_imit = float(sys.argv[4])
+#Beta_follow = float(sys.argv[5])
+#fc = float(sys.argv[6])
+#M = int(sys.argv[7])
+#run_number = int(sys.argv[8])
 
 #print("gotten run_number = %d" % run_number)
 # set the seed of the random number generator
-new_seed = np.random.randint(100000)
-np.random.seed(new_seed)
-# seed = np.random.randint(1,10000)
+#new_seed = np.random.randint(100000)
+#np.random.seed(new_seed)
+#seed = np.random.randint(1,10000)
 
 # auxiliary functions
 
@@ -110,7 +111,7 @@ def complete_game(A):
     coop_level_tab=[0]*number_of_games
     for i in range(number_of_games):
         # groups is shuffled randomly
-        np.random.shuffle(groups)
+        np.random.shuffle(groups)                         # we shuffle the tabel groups. groups[0], groups[1],...,groups[N-1] are the players that form the first group to play together, etc.
         tabel_c = [0]*number_of_groups
         C = [0]*Z
     
@@ -118,14 +119,14 @@ def complete_game(A):
             # print("len(A) = %d" % len(A))
             # for l in range(N):
                 # print(groups[k*N+l]-1)
-            n=np.random.randint(N)
+            n=np.random.randint(N)                       # we pick randomly the leader for each group.
             for m in range(N):
                 #if (A[1][groups[k*N+m] - 1] < A[1][groups[k*N+n] - 1]):
                 b = np.random.random()
-                if (b < following[groups[k*N+m]-1][groups[k*N+n]-1]):            #in each group, test if m player will follow the leader
+                if (b < following[groups[k*N+m]-1][groups[k*N+n]-1]):            # in each group, the player m will follow the leader with a certain probability
                     C[groups[k*N+m] - 1] = A[0][groups[k*N+n] - 1]                    
                 else:
-                    C[groups[k*N+m] - 1] = A[0][groups[k*N+m] - 1]               #C:tabel of stratrgies for this round
+                    C[groups[k*N+m] - 1] = A[0][groups[k*N+m] - 1]               # C:tabel of stratrgies for this round
             coop_level_tab[i]=number_of_cooperators(C)   
             tabel_c[k] = number_of_cooperators(
                 [C[groups[k*N+l] - 1] for l in range(N)])
@@ -244,11 +245,11 @@ def main(A, number_of_rounds):
     for i in range(number_of_rounds):
         tab[i] = number_of_cooperators(A[0])
         tab_coop_level[i]= coop_level
-        #print(i,tab[i])
-        #C=[ W[j] for j in range(len(A[0])) if (A[0][j]==1) ]
-        #D=[ W[j] for j in range(len(A[0])) if (A[0][j]==0) ]
+        print(i,tab[i])
+        C=[ W[j] for j in range(len(A[0])) if (A[0][j]==1) ]
+        D=[ W[j] for j in range(len(A[0])) if (A[0][j]==0) ]
         #print(W[0],W[1],W[2])
-        #print(i,"c:"+ str(sum(C)/number_of_cooperators(A[0])),"d:"+str(sum(D)/(len(A[0])-number_of_cooperators(A[0]))))
+        print(i,"c:"+ str(sum(C)/number_of_cooperators(A[0])),"d:"+str(sum(D)/(len(A[0])-number_of_cooperators(A[0]))))
         #print(i,coop_level)
         B = evolution(A, W)
         #print(B[0])
@@ -260,16 +261,16 @@ def main(A, number_of_rounds):
 
 A = [ [0]*int(round(Z*(1-fc))) + [1]*int(round(Z*fc)), strengths ]
 a = main(A, number_of_generations)
-# date = "run%04d" % seed # time.strftime("%Y%m%d-%H-%M-%S")
-date = time.strftime("%Y%m%d-%H-%M-%S") + ("_%05d_" % new_seed)
+#date = "run%04d" % seed # time.strftime("%Y%m%d-%H-%M-%S")
+#date = time.strftime("%Y%m%d-%H-%M-%S") + ("_%05d_" % new_seed)
 
-parameters = "r=%02d_mu=%.2f_Beta_imit=%.1f_Beta_follow=%.1f_fc=%.2f_M=%02d.tsv" % (
-    r, mu, Beta_imit, Beta_follow, fc, M)
-subfolder = parameters.strip(".tsv")
-subfolder = folder + "/" + subfolder
-if not os.path.exists(subfolder):
-    os.mkdir(subfolder)
-with open(subfolder + "/" + date + parameters, 'w') as fhOut:
-    writer = csv.writer(fhOut, delimiter='\t', lineterminator='\n')
-    writer.writerow(a[0])
-    writer.writerow(a[1])
+#parameters = "r=%02d_mu=%.2f_Beta_imit=%.1f_Beta_follow=%.1f_fc=%.2f_M=%02d.tsv" % (
+#    r, mu, Beta_imit, Beta_follow, fc, M)
+#subfolder = parameters.strip(".tsv")
+#subfolder = folder + "/" + subfolder
+#if not os.path.exists(subfolder):
+#    os.mkdir(subfolder)
+#with open(subfolder + "/" + date + parameters, 'w') as fhOut:
+#    writer = csv.writer(fhOut, delimiter='\t', lineterminator='\n')
+#    writer.writerow(a[0])
+#    writer.writerow(a[1])
