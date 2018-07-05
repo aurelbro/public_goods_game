@@ -7,19 +7,19 @@ Created on Fri Apr 13 15:24:07 2018
 
 Z = 1000                      # number of players
 N = 10                        # number of players per random group
-#r = 14.                     # benefit
+r = 4.5                     # benefit
 c = 1                         # cost
-#mu = 0.1                       # mutation rate
-#Beta_imit = 10.
-#Beta_follow = 1.                    # selection stength
-#number of games played before we launch the evolution process
+mu = 0.1                       # mutation rate
+Beta_imit = 10                     # selection stength
+Beta_follow=1.0
+# number of games played before we launch the evolution process
 number_of_games = 100
-#maximum number of strategies changed during an evolution process
+# maximum number of strategies changed during an evolution process
 nI = 5
 S = [0, 1]                    # set of strategies
-#fc = 0.5
-#M = 0                          # necessary threshold for the benefit being shared
-number_of_generations = 6000
+fc = 0.8
+M = 0                          # necessary threshold for the benefit being shared
+number_of_generations = 100
 
 # importations
 
@@ -32,28 +32,28 @@ import time
 import os
 from copy import deepcopy
 
-def usage():
-    print("usage : folder, r, mu, beta_imit, beta_follow, fc, M")
+#def usage():
+#    print("usage : folder, r, mu, beta_imit, beta_follow, fc, M")
 
 
-numberOfArgs = len(sys.argv)
-if(numberOfArgs < 8):
-    usage()
-    exit(-1)
+#numberOfArgs = len(sys.argv)
+#if(numberOfArgs < 8):
+#    usage()
+#    exit(-1)
 
-folder = sys.argv[1]
-r = float(sys.argv[2])
-mu = float(sys.argv[3])
-Beta_imit = float(sys.argv[4])
-Beta_follow = float(sys.argv[5])
-fc = float(sys.argv[6])
-M = int(sys.argv[7])
-run_number = int(sys.argv[8])
+#folder = sys.argv[1]
+#r = float(sys.argv[2])
+#mu = float(sys.argv[3])
+#Beta_imit = float(sys.argv[4])
+#Beta_follow = float(sys.argv[5])
+#fc = float(sys.argv[6])
+#M = int(sys.argv[7])
+#run_number = int(sys.argv[8])
 
 #print("gotten run_number = %d" % run_number)
 # set the seed of the random number generator
-new_seed = np.random.randint(100000)
-np.random.seed(new_seed)
+#new_seed = np.random.randint(100000)
+#np.random.seed(new_seed)
 #seed = np.random.randint(1,10000)
 
 # auxiliary functions
@@ -108,24 +108,26 @@ def complete_game(A):
     W = np.zeros(Z)
     number_of_groups = Z//N
     groups = [i for i in range(1, Z+1)]
-
+    coop_level_tab=[0]*number_of_games
     for i in range(number_of_games):
-        # on mélange aléatoirement groups
-        np.random.shuffle(groups)
+        # groups is shuffled randomly
+        np.random.shuffle(groups)                         # we shuffle the tabel groups. groups[0], groups[1],...,groups[N-1] are the players that form the first group to play together, etc.
         tabel_c = [0]*number_of_groups
         C = [0]*Z
+    
         for k in range(number_of_groups):
             # print("len(A) = %d" % len(A))
             # for l in range(N):
                 # print(groups[k*N+l]-1)
-            n=np.random.randint(N)
+            n=np.random.randint(N)                       # we pick randomly the leader for each group.
             for m in range(N):
+                #if (A[1][groups[k*N+m] - 1] < A[1][groups[k*N+n] - 1]):
                 b = np.random.random()
-                if (b < following[groups[k*N+m]-1][groups[k*N+n]-1]):            #in each group, test if m player will follow the leader
+                if (b < following[groups[k*N+m]-1][groups[k*N+n]-1]):            # in each group, the player m will follow the leader with a certain probability
                     C[groups[k*N+m] - 1] = A[0][groups[k*N+n] - 1]                    
                 else:
-                    C[groups[k*N+m] - 1] = A[0][groups[k*N+m] - 1]
-               
+                    C[groups[k*N+m] - 1] = A[0][groups[k*N+m] - 1]               # C:tabel of stratrgies for this round
+            coop_level_tab[i]=number_of_cooperators(C)   
             tabel_c[k] = number_of_cooperators(
                 [C[groups[k*N+l] - 1] for l in range(N)])
             for j in range(N):
@@ -135,31 +137,37 @@ def complete_game(A):
 
     # W, tableau des payoffs alimenté à chaque étape
     W = W/number_of_games
-    return W
+    coop_level= sum(coop_level_tab)/number_of_games
+    return W, coop_level      
 
 
 # evolution function
 def evolution(A, W):
     l = len(S)
     B = deepcopy(A)
-    for k in range(nI):
+    #for k in range(nI):
 
-        a = np.random.random()
+    #    a = np.random.random()
 
-        if (a < 1-mu):
-            i = np.random.randint(1, Z+1)
-            j = np.random.randint(1, Z+1)
-            while (j == i):
-                j = np.random.randint(1, Z+1)
-            b = np.random.random()
-            if (b < fermi_function_imit(i, j, W)):
-                B[0][i-1] = B[0][j-1]
-
-        else:
-            i = np.random.randint(1, Z+1)
-            mutation = np.random.randint(1, l+1)
-            B[0][i-1] = S[mutation - 1]
-
+    #    if (a < 1-mu):
+    #        i = np.random.randint(1, Z+1)
+    #        j = np.random.randint(1, Z+1)
+    #        while (j == i):
+    #            j = np.random.randint(1, Z+1)
+    #        b = np.random.random()
+    #        if (b < fermi_function_imit(i, j, W)):
+    #            B[0][i-1] = B[0][j-1]
+    #            B[1][i-1] = B[1][i-1] 
+    #    else:
+    #        i = np.random.randint(1, Z+1)
+    #        mutation = np.random.randint(1, l+1)
+    #        B[0][i-1] = S[mutation - 1]
+    #        j = np.random.randint(1, Z+1)
+    #        B[1][i-1] = strengths[j-1]
+    index_min = np.argmin(W)
+    index_max = np.argmax(W)
+    B[0][index_min] = B[0][index_max]
+    B[1][index_min] = B[1][index_max]
     return(B)
 
 
@@ -236,85 +244,39 @@ def evolution(A, W):
 
 def main(A, number_of_rounds):
 
-    #tab = np.zeros(number_of_rounds)
-    #tab_coop_level= np.zeros(number_of_rounds)
-    t=[0,0.2,0.6,1.0,1.5]
-    le=len(t)
-    count_c= np.zeros((number_of_rounds, le))
-    count= np.zeros((number_of_rounds, le))
-    W= complete_game(A)
+    tab = np.zeros(number_of_rounds)
+    tab_coop_level= np.zeros(number_of_rounds)
+    W,coop_level = complete_game(A)
     for i in range(number_of_rounds):
-        for l in range(le-1):
-            for j in range(Z):
-                if (t[l]<= A[1][j]<=t[l+1]):
-                    count[i][l]+=1
-                    if (A[0][j]==1):
-                      count_c[i][l]+=1
-        count[i][le-1]= Z- sum( count[i][k] for k in range(le-1) )
-        for j in range(Z):
-            if (A[1][j]>t[le-1]):
-                if (A[0][j]==1):
-                  count_c[i][le-1]+=1
         tab[i] = number_of_cooperators(A[0])
-        #tab_coop_level[i]= coop_level
-        #print(i,tab[i])
+        tab_coop_level[i]= coop_level
+        print(i,tab[i])
         #C=[ W[j] for j in range(len(A[0])) if (A[0][j]==1) ]
         #D=[ W[j] for j in range(len(A[0])) if (A[0][j]==0) ]
         #print(W[0],W[1],W[2])
         #print(i,"c:"+ str(sum(C)/number_of_cooperators(A[0])),"d:"+str(sum(D)/(len(A[0])-number_of_cooperators(A[0]))))
         #print(i,coop_level)
         B = evolution(A, W)
-        #print(B[0]!= A[0])
+        #print(B[0])
+        print(np.max(B[1]))
         if (B[0] != A[0]):
           A = B
-          W = complete_game(A)
-    return count_c/count
-
-
-# Add of the cooperation level with respect to the strength throughout generations.
-
-#def count_with_strength(strengths, number_of_generations):
-#  t=[0,0.2,0.6,1.0,1.5]
-#  len=len(t)
-#  count= [[0]*len for k in range (number_of_generations)]
-#  for l in range(number_of_generations):
-#      for i in range(len-1):
-#          for j in range(Z):
-#              if (t[i]<=  strengths[j]<=t[i+1]):
-#                  count[l][i]+=1
-#      count[l][len-1]= Z- sum( count[l][k] for k in range(len-1) )
-#  return count
-
-#def matrix_for_heatmap(strengths, number_of_generations):
-#    count= count_with_strength(strengths, number_of_generations)
-#    mat= [[0]*len for k in range (number_of_generations/100)]
-#    for l in range(number_of_generations/100):
-#      for i in range(len-1):
-#          mat[l][i]= sum(count[k][i] for k in range(100*l,100*(l+1)))
-#    return mat                               # mat contains the values for the heatmap
-
-
-
-
-
-
-
+          W, coop_level = complete_game(A)
+    return tab, tab_coop_level
 
 
 A = [ [0]*int(round(Z*(1-fc))) + [1]*int(round(Z*fc)), strengths ]
 a = main(A, number_of_generations)
-#print(a[0], a[1], a[2])
 #date = "run%04d" % seed # time.strftime("%Y%m%d-%H-%M-%S")
-date = time.strftime("%Y%m%d-%H-%M-%S") + ("_%05d_" % new_seed)
+#date = time.strftime("%Y%m%d-%H-%M-%S") + ("_%05d_" % new_seed)
 
-parameters = "r=%02d_mu=%.2f_Beta_imit=%.1f_Beta_follow=%.1f_fc=%.2f_M=%02d.tsv" % (
-    r, mu, Beta_imit, Beta_follow, fc, M)
-subfolder = parameters.strip(".tsv")
-subfolder = folder + "/" + subfolder
-if not os.path.exists(subfolder):
-    os.mkdir(subfolder)
-with open(subfolder + "/" + date + parameters, 'w') as fhOut:
-    writer = csv.writer(fhOut, delimiter='\t', lineterminator='\n')
-    writer.writerow(a)
- # writer.writerow(a[1])
-    
+#parameters = "r=%02d_mu=%.2f_Beta_imit=%.1f_Beta_follow=%.1f_fc=%.2f_M=%02d.tsv" % (
+#    r, mu, Beta_imit, Beta_follow, fc, M)
+#subfolder = parameters.strip(".tsv")
+#subfolder = folder + "/" + subfolder
+#if not os.path.exists(subfolder):
+#    os.mkdir(subfolder)
+#with open(subfolder + "/" + date + parameters, 'w') as fhOut:
+#    writer = csv.writer(fhOut, delimiter='\t', lineterminator='\n')
+#    writer.writerow(a[0])
+#    writer.writerow(a[1])
