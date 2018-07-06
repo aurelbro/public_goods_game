@@ -103,19 +103,18 @@ following= values_of_fermi_function_with_strength(strengths)
 # print(Payoffs)
 
 def roulette_wheel_selection(W):
-  cum_probability=np.zeros(Z)
-  payoff_sum = np.sum(W)
-  probability_offset = 0
-  for i in range(Z):
-    cum_probability[i] = probability_offset + (W[i] / payoff_sum)
-    probability_offset += cum_probability[i]
+   cum_probability=np.zeros(Z)
+   payoff_sum = np.sum(W)
+   cum_sum=0.
+   for i in range(Z):
+     cum_sum += W[i]
+     cum_probability[i] = cum_sum/payoff_sum        
 
-  r = np.random.random()
+   r = np.random.random()
 
-  selected_ind = individuals[0] # initialize
-  for i in range(Z):
-      if cum_probability[i] > r:
-          return i
+   for i in range(Z):
+       if (cum_probability[i] > r):
+           return i
 
 
 # game simulation function
