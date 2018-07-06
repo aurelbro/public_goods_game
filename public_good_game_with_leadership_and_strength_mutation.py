@@ -7,18 +7,18 @@ Created on Fri Apr 13 15:24:07 2018
 
 Z = 1000                      # number of players
 N = 10                        # number of players per random group
-#r = 4.5                     # benefit
+# r = 4.5                     # benefit
 c = 1                         # cost
-#mu = 0.1                       # mutation rate
-#Beta_imit = 10                     # selection stength
-#Beta_follow=1.0
+# mu = 0.1                       # mutation rate
+# Beta_imit = 10                     # selection stength
+# Beta_follow=1.0
 # number of games played before we launch the evolution process
 number_of_games = 100
 # maximum number of strategies changed during an evolution process
 nI = 5
 S = [0, 1]                    # set of strategies
-#fc = 0.5
-#M = 0                          # necessary threshold for the benefit being shared
+# fc = 0.5
+# M = 0                          # necessary threshold for the benefit being shared
 number_of_generations = 6000
 
 # importations

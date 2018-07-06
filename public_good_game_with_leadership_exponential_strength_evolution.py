@@ -31,6 +31,7 @@ import csv
 import time
 import os
 from copy import deepcopy
+from scipy.stats import expon
 
 def usage():
     print("usage : folder, r, mu, beta_imit, beta_follow, fc, M")
@@ -101,6 +102,22 @@ strengths= np.random.exponential(1,Z)
 following= values_of_fermi_function_with_strength(strengths)   
 # print(Payoffs)
 
+def roulette_wheel_selection(W):
+  cum_probability=np.zeros(Z)
+  payoff_sum = np.sum(W)
+  probability_offset = 0
+  for i in range(Z):
+    cum_probability[i] = probability_offset + (W[i] / payoff_sum)
+    probability_offset += cum_probability[i]
+
+  r = np.random.random()
+
+  selected_ind = individuals[0] # initialize
+  for i in range(Z):
+      if cum_probability[i] > r:
+          return i
+
+
 # game simulation function
 
 
@@ -147,19 +164,16 @@ def evolution(A, W):
         a = np.random.random()
 
         if (a < 1-mu):
-            i = np.random.randint(1, Z+1)
-            j = np.random.randint(1, Z+1)
-            while (j == i):
-                j = np.random.randint(1, Z+1)
-            b = np.random.random()
-            if (b < fermi_function_imit(i, j, W)):
-                B[0][i-1] = B[0][j-1]
+            index_die=np.random.randint(0, Z)                       # die randomly, reproduction with roulette wheel
+            B[0][index_die]=B[0][roulette_wheel_selection(W)]
+            B[1][index_die]=B[1][roulette_wheel_selection(W)]
 
         else:
             i = np.random.randint(1, Z+1)
             mutation = np.random.randint(1, l+1)
+            s=np.random.exponential(1)
             B[0][i-1] = S[mutation - 1]
-
+            B[1][i-1] = s
     return(B)
 
 
@@ -236,9 +250,9 @@ def evolution(A, W):
 
 def main(A, number_of_rounds):
 
-    #tab = np.zeros(number_of_rounds)
+    tab = np.zeros(number_of_rounds)
     #tab_coop_level= np.zeros(number_of_rounds)
-    t=[0,0.2,0.6,1.0,1.5]
+    t=[expon.ppf(0.10*i for i in range(10))]
     le=len(t)
     count_c= np.zeros((number_of_rounds, le))
     count= np.zeros((number_of_rounds, le))
@@ -268,7 +282,7 @@ def main(A, number_of_rounds):
         if (B[0] != A[0]):
           A = B
           W = complete_game(A)
-    return count_c/count
+    return tab, count_c/count, count/Z
 
 
 # Add of the cooperation level with respect to the strength throughout generations.
@@ -315,6 +329,6 @@ if not os.path.exists(subfolder):
     os.mkdir(subfolder)
 with open(subfolder + "/" + date + parameters, 'w') as fhOut:
     writer = csv.writer(fhOut, delimiter='\t', lineterminator='\n')
-    writer.writerow(a)
- # writer.writerow(a[1])
-    
+    writer.writerow(a[0])
+    writer.writerow(a[1])
+    writer.writerow(a[2])
