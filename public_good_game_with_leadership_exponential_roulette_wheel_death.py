@@ -34,22 +34,22 @@ from copy import deepcopy
 from scipy.stats import expon
 
 def usage():
-    print("usage : folder, r, mu, beta_imit, beta_follow, fc, M")
+    print("usage : folder, r, mu, beta_follow, fc, M")
 
 
 numberOfArgs = len(sys.argv)
-if(numberOfArgs < 8):
+if(numberOfArgs < 7):
     usage()
     exit(-1)
 
 folder = sys.argv[1]
 r = float(sys.argv[2])
 mu = float(sys.argv[3])
-Beta_imit = float(sys.argv[4])
-Beta_follow = float(sys.argv[5])
-fc = float(sys.argv[6])
-M = int(sys.argv[7])
-run_number = int(sys.argv[8])
+#Beta_imit = float(sys.argv[4])
+Beta_follow = float(sys.argv[4])
+fc = float(sys.argv[5])
+M = int(sys.argv[6])
+run_number = int(sys.argv[7])
 
 #print("gotten run_number = %d" % run_number)
 # set the seed of the random number generator
@@ -66,8 +66,8 @@ def indicator_function(boolean):
     return 0
 
 
-def fermi_function_imit(i, j, W):
-    return(1./(1 + np.exp(- Beta_imit * (W[j-1] - W[i-1]))))
+#def fermi_function_imit(i, j, W):
+#    return(1./(1 + np.exp(- Beta_imit * (W[j-1] - W[i-1]))))
 
 def fermi_function_follow(i, j, W):
     return(1./(1 + np.exp(- Beta_follow * (W[j-1] - W[i-1]))))
