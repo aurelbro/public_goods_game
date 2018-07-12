@@ -262,6 +262,7 @@ def main(A, number_of_rounds):
     t=[expon.ppf(0.10*i for i in range(10))]
     le=len(t)
     count_c= np.zeros((number_of_rounds, le))
+    proportion_c= np.zeros((number_of_rounds, le))
     count= np.zeros((number_of_rounds, le))
     W= complete_game(A)
     for i in range(number_of_rounds):
@@ -277,6 +278,9 @@ def main(A, number_of_rounds):
                 if (A[0][j]==1):
                   count_c[i][le-1]+=1
         tab[i] = number_of_cooperators(A[0])
+        s=np.sum(count_c[i])
+        for l in range(le-1):
+            proportion_c[i][l]=count_c[i][l]/s
         #tab_coop_level[i]= coop_level
         #print(i,tab[i])
         #C=[ W[j] for j in range(len(A[0])) if (A[0][j]==1) ]
@@ -289,7 +293,7 @@ def main(A, number_of_rounds):
         if (B[0] != A[0]):
           A = B
           W = complete_game(A)
-    return tab, count_c/count, count/Z
+    return tab, proportion_c, count/Z
 
 
 # Add of the cooperation level with respect to the strength throughout generations.
