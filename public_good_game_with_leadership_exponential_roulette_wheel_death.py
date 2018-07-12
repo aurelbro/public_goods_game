@@ -279,8 +279,8 @@ def main(A, number_of_rounds):
                   count_c[i][le-1]+=1
         tab[i] = number_of_cooperators(A[0])
         s=np.sum(count_c[i])
-        for l in range(le-1):
-            proportion_c[i][l]=count_c[i][l]/s
+        for k in range(le):
+            proportion_c[i][k]=count_c[i][k]/s
         #tab_coop_level[i]= coop_level
         #print(i,tab[i])
         #C=[ W[j] for j in range(len(A[0])) if (A[0][j]==1) ]
@@ -290,9 +290,9 @@ def main(A, number_of_rounds):
         #print(i,coop_level)
         B = evolution(A, W)
         #print(B[0]!= A[0])
-        if (B[0] != A[0]):
-          A = B
-          W = complete_game(A)
+        #if (B[0] != A[0]):
+        A = B
+        W = complete_game(A)
     return tab, proportion_c, count/Z
 
 
