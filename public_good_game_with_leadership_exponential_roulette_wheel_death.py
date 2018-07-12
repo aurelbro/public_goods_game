@@ -166,20 +166,21 @@ def evolution(A, W):
     B = deepcopy(A)
     for k in range(nI):
         
-        b= np.random.random()
+        #b= np.random.random()
        
-        if (b < 1-mu):
-            c= np.random.randint(0,Z)
-            index_die = roulette_wheel_selection(W)
-            B[0][index_die]=B[0][c]
-            B[1][index_die]=B[1][c]
+        #if (b < 1-mu):
+        index_die = roulette_wheel_selection(W)
+        mutation = np.random.randint(1, l+1)
+        s=np.random.exponential(1)
+        B[0][index_die] = S[mutation - 1]
+        B[1][index_die] = s
 
-        else:
-            i = np.random.randint(1, Z+1)
-            mutation = np.random.randint(1, l+1)
-            s=np.random.exponential(1)
-            B[0][i-1] = S[mutation - 1]
-            B[1][i-1] = s
+        #else:
+        #    i = np.random.randint(1, Z+1)
+        #    mutation = np.random.randint(1, l+1)
+        #    s=np.random.exponential(1)
+        #    B[0][i-1] = S[mutation - 1]
+        #    B[1][i-1] = s
     return(B)
 
 
