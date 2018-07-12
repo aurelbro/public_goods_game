@@ -38,18 +38,18 @@ def usage():
 
 
 numberOfArgs = len(sys.argv)
-if(numberOfArgs < 7):
+if(numberOfArgs < 6):
     usage()
     exit(-1)
 
 folder = sys.argv[1]
 r = float(sys.argv[2])
-mu = float(sys.argv[3])
+#mu = float(sys.argv[3])
 #Beta_imit = float(sys.argv[4])
-Beta_follow = float(sys.argv[4])
-fc = float(sys.argv[5])
-M = int(sys.argv[6])
-run_number = int(sys.argv[7])
+Beta_follow = float(sys.argv[3])
+fc = float(sys.argv[4])
+M = int(sys.argv[5])
+run_number = int(sys.argv[6])
 
 #print("gotten run_number = %d" % run_number)
 # set the seed of the random number generator
@@ -332,7 +332,7 @@ a = main(A, number_of_generations)
 #date = "run%04d" % seed # time.strftime("%Y%m%d-%H-%M-%S")
 date = time.strftime("%Y%m%d-%H-%M-%S") + ("_%05d_" % new_seed)
 
-parameters = "r=%02d_mu=%.2f_Beta_follow=%.1f_fc=%.2f_M=%02d.tsv" % (
+parameters = "r=%02d_Beta_follow=%.1f_fc=%.2f_M=%02d.tsv" % (
     r, mu, Beta_follow, fc, M)
 subfolder = parameters.strip(".tsv")
 subfolder = folder + "/" + subfolder
