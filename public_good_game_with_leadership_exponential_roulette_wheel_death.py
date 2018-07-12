@@ -103,13 +103,12 @@ following= values_of_fermi_function_with_strength(strengths)
 # print(Payoffs)
 
 def roulette_wheel_selection(W):
-   l=len(W)
    cum_probability=np.zeros(Z)
    W_bis=deepcopy(W) 
    minimum=min(W)
    W_bis=W_bis+abs(minimum)
    maximum=max(W_bis)
-   for i in range(l):
+   for i in range(Z):
        W_bis[i]= maximum-W_bis[i]
    payoff_sum = np.sum(W_bis)
    cum_sum= 0.
