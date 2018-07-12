@@ -19,7 +19,7 @@ nI = 5
 S = [0, 1]                    # set of strategies
 #fc = 0.5
 #M = 0                          # necessary threshold for the benefit being shared
-number_of_generations = 6000
+number_of_generations = 10000
 
 # importations
 
@@ -170,10 +170,10 @@ def evolution(A, W):
         b= np.random.random()
        
         if (b < 1-mu):
-            a= np.random.randint(0,Z)
+            c= np.random.randint(0,Z)
             index_die = roulette_wheel_selection(W)
-            B[0][index_die]=B[0][a]
-            B[1][index_die]=B[1][a]
+            B[0][index_die]=B[0][c]
+            B[1][index_die]=B[1][c]
 
         else:
             i = np.random.randint(1, Z+1)
