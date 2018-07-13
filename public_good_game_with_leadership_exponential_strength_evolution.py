@@ -19,7 +19,7 @@ nI = 5
 S = [0, 1]                    # set of strategies
 #fc = 0.5
 #M = 0                          # necessary threshold for the benefit being shared
-number_of_generations = 6000
+number_of_generations = 10000
 
 # importations
 
@@ -45,11 +45,11 @@ if(numberOfArgs < 8):
 folder = sys.argv[1]
 r = float(sys.argv[2])
 mu = float(sys.argv[3])
-Beta_imit = float(sys.argv[4])
-Beta_follow = float(sys.argv[5])
-fc = float(sys.argv[6])
-M = int(sys.argv[7])
-run_number = int(sys.argv[8])
+#Beta_imit = float(sys.argv[4])
+Beta_follow = float(sys.argv[4])
+fc = float(sys.argv[5])
+M = int(sys.argv[6])
+run_number = int(sys.argv[7])
 
 #print("gotten run_number = %d" % run_number)
 # set the seed of the random number generator
@@ -104,6 +104,8 @@ following= values_of_fermi_function_with_strength(strengths)
 
 def roulette_wheel_selection(W):
    cum_probability=np.zeros(Z)
+   minimum=min(W)
+   W=W+abs(minimum)
    payoff_sum = np.sum(W)
    cum_sum=0.
    for i in range(Z):
@@ -251,9 +253,10 @@ def main(A, number_of_rounds):
 
     tab = np.zeros(number_of_rounds)
     #tab_coop_level= np.zeros(number_of_rounds)
-    t=[expon.ppf(0.10*i for i in range(10))]
+    t=[expon.ppf(0.10*i) for i in range(10)]
     le=len(t)
     count_c= np.zeros((number_of_rounds, le))
+    proportion_c= np.zeros((number_of_generations, le))
     count= np.zeros((number_of_rounds, le))
     W= complete_game(A)
     for i in range(number_of_rounds):
@@ -269,6 +272,9 @@ def main(A, number_of_rounds):
                 if (A[0][j]==1):
                   count_c[i][le-1]+=1
         tab[i] = number_of_cooperators(A[0])
+        s=np.sum(count_c[i])
+        for k in range(le):
+            proportion_c[i][k]=count_c[i][k]/s
         #tab_coop_level[i]= coop_level
         #print(i,tab[i])
         #C=[ W[j] for j in range(len(A[0])) if (A[0][j]==1) ]
@@ -281,7 +287,7 @@ def main(A, number_of_rounds):
         if (B[0] != A[0]):
           A = B
           W = complete_game(A)
-    return tab, count_c/count, count/Z
+    return tab, proportion_c, count/Z
 
 
 # Add of the cooperation level with respect to the strength throughout generations.
@@ -320,7 +326,7 @@ a = main(A, number_of_generations)
 #date = "run%04d" % seed # time.strftime("%Y%m%d-%H-%M-%S")
 date = time.strftime("%Y%m%d-%H-%M-%S") + ("_%05d_" % new_seed)
 
-parameters = "r=%02d_mu=%.2f_Beta_imit=%.1f_Beta_follow=%.1f_fc=%.2f_M=%02d.tsv" % (
+parameters = "r=%02d_mu=%.2f_Beta_follow=%.1f_fc=%.2f_M=%02d.tsv" % (
     r, mu, Beta_imit, Beta_follow, fc, M)
 subfolder = parameters.strip(".tsv")
 subfolder = folder + "/" + subfolder
