@@ -327,7 +327,7 @@ a = main(A, number_of_generations)
 date = time.strftime("%Y%m%d-%H-%M-%S") + ("_%05d_" % new_seed)
 
 parameters = "r=%02d_mu=%.2f_Beta_follow=%.1f_fc=%.2f_M=%02d.tsv" % (
-    r, mu, Beta_imit, Beta_follow, fc, M)
+    r, mu, Beta_follow, fc, M)
 subfolder = parameters.strip(".tsv")
 subfolder = folder + "/" + subfolder
 if not os.path.exists(subfolder):
