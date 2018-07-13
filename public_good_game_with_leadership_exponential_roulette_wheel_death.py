@@ -259,7 +259,7 @@ def main(A, number_of_rounds):
 
     tab = np.zeros(number_of_rounds)
     #tab_coop_level= np.zeros(number_of_rounds)
-    t=[expon.ppf(0.10*i for i in range(10))]
+    t=[expon.ppf(0.10*i) for i in range(10)]
     le=len(t)
     count_c= np.zeros((number_of_generations, le))
     proportion_c= np.zeros((number_of_generations, le))
