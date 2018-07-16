@@ -28,10 +28,10 @@ import matplotlib.pyplot as plt
 #data = [trace]
 #py.plot(data, filename='basic-heatmap')
 
-def heatmap(r_par, mu_par, beta_imit, beta_follow, fc_par, M_par):
-    foldername = "simulations_with_leadership_exponential_advanced/r=%02d_mu=%.2f_Beta_imit=%.1f_Beta_follow=%.1f_fc=%.2f_M=%02d" % (r_par,mu_par, beta_imit, beta_follow, fc_par, M_par)
-    matr=np.zeros((6000, 5))
-    matrix=np.zeros((10,60000, 5))
+def heatmap(r_par, beta_follow, fc_par, M_par):
+    foldername = "simulations_with_leadership_exponential_roulette_wheel_death/r=%02d_Beta_follow=%.1f_fc=%.2f_M=%02d" % (r_par, beta_follow, fc_par, M_par)
+    matr=np.zeros((10000, 10))
+    matrix=np.zeros((10,10000, 10))
     c=0                                       # creation of the matrix
     for file in os.listdir(foldername):                           # pour chaque fichier: 
         if file.endswith(".tsv"):
@@ -39,11 +39,13 @@ def heatmap(r_par, mu_par, beta_imit, beta_follow, fc_par, M_par):
           with open(foldername + "/" + file, "r") as file:
                 reader=csv.reader(file, delimiter='\t')
                 row=next(reader)
+                row=next(reader)
+                #row=next(reader)
                 #matr=[0]*6000
                 #print(row[0]) 
                 #print(type(row[0]))               
                 #line=[float(i) for i in row[0]]
-                for i in range(6000):
+                for i in range(10000):
                   a=row[i].strip('[]')
                   a=a.split(' ')
                 #if ('' in line):
@@ -59,7 +61,7 @@ def heatmap(r_par, mu_par, beta_imit, beta_follow, fc_par, M_par):
                 #print(matr)
                 #print(np.mean(matr[0:2],axis=0))
                 #matrix=np.zeros((600,5))
-                for j in range(60):
+                for j in range(100):
                     matrix[c][j]=np.mean(matr[100*j:100*(j+1)],axis=0)
                 #print(matrix)
                 c+=1
@@ -79,9 +81,9 @@ def heatmap(r_par, mu_par, beta_imit, beta_follow, fc_par, M_par):
                  #   for j in range(5):
                 #      mat[i][j]+= row[i][j]
     #print(matrix[9])
-    mat=np.zeros((60,5))
+    mat=np.zeros((100,10))
     #print(matrix[0][60])
-    for k in range(60):
+    for k in range(100):
       mat[k]= np.mean(np.transpose(np.column_stack((matrix[j][k] for j in range(10)))), axis=0)
     #print(mat)
     #for i in range(600):
@@ -90,14 +92,14 @@ def heatmap(r_par, mu_par, beta_imit, beta_follow, fc_par, M_par):
     plt.matshow(mat)
     axes=plt.gca()
     #axes.xaxis.set_ticklabels(['', '10%', '30%', '50%', '70%', '90%'])
-    axes.yaxis.set_ticklabels(['','0-0.2', '0.2-0.6', '0.6-1.0', '1.0-1.5', '+1.5'])
+    axes.yaxis.set_ticklabels(['','first decile', 'third decile', 'fifth decile ', 'seventh decile', 'ninth decile'])
     axes.set_xlabel('part of cooperators in each strength interval in function of time')
     axes.set_ylabel('strength interval')
     axes.xaxis.set_label_position('bottom')
     axes.xaxis.set_ticks_position('bottom')
-    plt.clim(0.5,1)
-    plt.title("r="+str(r_par)+" mu="+str(mu_par)+" Beta_imit="+str(beta_imit)+" Beta_follow="+str(beta_follow)+" fc="+str(fc_par)+" M="+str(M_par))
+    plt.clim(0.075,0.125)
+    plt.title("r="+str(r_par)+" Beta_follow="+str(beta_follow)+" fc="+str(fc_par)+" M="+str(M_par))
     plt.colorbar()
     plt.show()
 
-heatmap(5,0.00,10.0,1.,0.70,4)
+heatmap(3,1.,0.70,4)
