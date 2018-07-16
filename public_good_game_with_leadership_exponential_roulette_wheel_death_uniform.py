@@ -34,22 +34,22 @@ from copy import deepcopy
 from scipy.stats import expon
 
 def usage():
-    print("usage : folder, r, mu, beta_imit, beta_follow, fc, M")
+    print("usage : folder, r, mu, beta_follow, fc, M")
 
 
 numberOfArgs = len(sys.argv)
-if(numberOfArgs < 7):
+if(numberOfArgs < 6):
     usage()
     exit(-1)
 
 folder = sys.argv[1]
 r = float(sys.argv[2])
-mu = float(sys.argv[3])
+#mu = float(sys.argv[3])
 #Beta_imit = float(sys.argv[4])
-Beta_follow = float(sys.argv[4])
-fc = float(sys.argv[5])
-M = int(sys.argv[6])
-run_number = int(sys.argv[7])
+Beta_follow = float(sys.argv[3])
+fc = float(sys.argv[4])
+M = int(sys.argv[5])
+run_number = int(sys.argv[6])
 
 #print("gotten run_number = %d" % run_number)
 # set the seed of the random number generator
@@ -66,8 +66,8 @@ def indicator_function(boolean):
     return 0
 
 
-def fermi_function_imit(i, j, W):
-    return(1./(1 + np.exp(- Beta_imit * (W[j-1] - W[i-1]))))
+#def fermi_function_imit(i, j, W):
+#    return(1./(1 + np.exp(- Beta_imit * (W[j-1] - W[i-1]))))
 
 def fermi_function_follow(i, j, W):
     return(1./(1 + np.exp(- Beta_follow * (W[j-1] - W[i-1]))))
@@ -98,18 +98,22 @@ def values_of_fermi_function_with_strength(tab):            # calculation of all
             mat[i][j]= fermi_function_follow(i, j, tab)
     return(mat)
 
-strengths= np.random.uniform(0,10)
+strengths= np.random.uniform(0,10,Z)
 following= values_of_fermi_function_with_strength(strengths)   
 # print(Payoffs)
 
 def roulette_wheel_selection(W):
    cum_probability=np.zeros(Z)
-   minimum=min(W)
-   W=W+abs(minimum)
-   payoff_sum = np.sum(W)
-   cum_sum=0.
+   W_bis=1./(1+np.exp(W)) 
+   #minimum=min(W)
+   #W_bis=W_bis+abs(minimum)
+   #maximum=max(W_bis)
+   #for i in range(Z):
+   #    W_bis[i]= maximum-W_bis[i]
+   payoff_sum = np.sum(W_bis)
+   cum_sum= 0.
    for i in range(Z):
-     cum_sum += W[i]
+     cum_sum += W_bis[i]
      cum_probability[i] = cum_sum/payoff_sum        
 
    r = np.random.random()
@@ -161,20 +165,22 @@ def evolution(A, W):
     l = len(S)
     B = deepcopy(A)
     for k in range(nI):
+        
+        #b= np.random.random()
+       
+        #if (b < 1-mu):
+        index_die = roulette_wheel_selection(W)
+        mutation = np.random.randint(1, l+1)
+        s=np.random.exponential(1)
+        B[0][index_die] = S[mutation - 1]
+        B[1][index_die] = s
 
-        a = np.random.random()
-
-        if (a < 1-mu):
-            index_die=np.random.randint(0, Z)                       # die randomly, reproduction with roulette wheel
-            B[0][index_die]=B[0][roulette_wheel_selection(W)]
-            B[1][index_die]=B[1][roulette_wheel_selection(W)]
-
-        else:
-            i = np.random.randint(1, Z+1)
-            mutation = np.random.randint(1, l+1)
-            s=np.random.exponential(1)
-            B[0][i-1] = S[mutation - 1]
-            B[1][i-1] = s
+        #else:
+        #    i = np.random.randint(1, Z+1)
+        #    mutation = np.random.randint(1, l+1)
+        #    s=np.random.exponential(1)
+        #    B[0][i-1] = S[mutation - 1]
+        #    B[1][i-1] = s
     return(B)
 
 
@@ -255,11 +261,11 @@ def main(A, number_of_rounds):
     #tab_coop_level= np.zeros(number_of_rounds)
     t=[expon.ppf(0.10*i) for i in range(10)]
     le=len(t)
-    count_c= np.zeros((number_of_rounds, le))
+    count_c= np.zeros((number_of_generations, le))
     proportion_c= np.zeros((number_of_generations, le))
-    count= np.zeros((number_of_rounds, le))
+    count= np.zeros((number_of_generations, le))
     W= complete_game(A)
-    for i in range(number_of_rounds):
+    for i in range(number_of_generations):
         for l in range(le-1):
             for j in range(Z):
                 if (t[l]<= A[1][j]<=t[l+1]):
@@ -284,9 +290,9 @@ def main(A, number_of_rounds):
         #print(i,coop_level)
         B = evolution(A, W)
         #print(B[0]!= A[0])
-        if (B[0] != A[0]):
-          A = B
-          W = complete_game(A)
+        #if (B[0] != A[0]):
+        A = B
+        W = complete_game(A)
     return tab, proportion_c, count/Z
 
 
@@ -326,8 +332,8 @@ a = main(A, number_of_generations)
 #date = "run%04d" % seed # time.strftime("%Y%m%d-%H-%M-%S")
 date = time.strftime("%Y%m%d-%H-%M-%S") + ("_%05d_" % new_seed)
 
-parameters = "r=%02d_mu=%.2f_Beta_follow=%.1f_fc=%.2f_M=%02d.tsv" % (
-    r, mu, Beta_follow, fc, M)
+parameters = "r=%02d_Beta_follow=%.1f_fc=%.2f_M=%02d.tsv" % (
+    r, Beta_follow, fc, M)
 subfolder = parameters.strip(".tsv")
 subfolder = folder + "/" + subfolder
 if not os.path.exists(subfolder):
