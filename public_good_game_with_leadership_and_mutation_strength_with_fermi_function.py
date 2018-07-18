@@ -240,7 +240,7 @@ def main(A, number_of_rounds):
     tab = np.zeros((2*number_of_rounds,Z))
     W= complete_game(A)
     for i in range(number_of_rounds):
-        tab[i]=A[0]
+        tab[i]=number_of_cooperators(A[0])
         tab[i+number_of_rounds]=A[1]
         B = evolution(A, W)
         A = B
