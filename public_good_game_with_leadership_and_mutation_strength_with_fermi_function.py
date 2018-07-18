@@ -19,7 +19,7 @@ nI = 5
 S = [0, 1]                    # set of strategies
 # fc = 0.5
 # M = 0                          # necessary threshold for the benefit being shared
-number_of_generations = 10000
+number_of_generations = 6000
 
 # importations
 
@@ -195,7 +195,7 @@ def evolution(A, W):
     #    exit(-1)
     #tab = np.zeros(number_of_rounds)
     #tab[0] = number_of_cooperators(A)
-    # print(0, tab[0])
+    # print(0, tab[0])[i]=number_of_cooperators(A[0])
     #W = complete_game(A)
     # for i in range(1, number_of_rounds):
     #    B = evolution(A, W)
@@ -245,7 +245,7 @@ def main(A, number_of_rounds):
         B = evolution(A, W)
         A = B
         W = complete_game(A)
-    return tab
+    return tab_1, tab_2
 
 
 
@@ -262,6 +262,6 @@ if not os.path.exists(subfolder):
     os.mkdir(subfolder)
 with open(subfolder + "/" + date + parameters, 'w') as fhOut:
     writer = csv.writer(fhOut, delimiter='\t', lineterminator='\n')
-    writer.writerow(a)
-    #writer.writerow(a[1])
+    writer.writerow(a[0])
+    writer.writerow(a[1])
     #writer.writerow(a[2])
