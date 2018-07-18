@@ -241,7 +241,7 @@ def main(A, number_of_rounds):
     W= complete_game(A)
     for i in range(number_of_rounds):
         tab[i]=A[0]
-        tab[i+1]=A[1]
+        tab[i+number_of_rounds]=A[1]
         B = evolution(A, W)
         A = B
         W = complete_game(A)
