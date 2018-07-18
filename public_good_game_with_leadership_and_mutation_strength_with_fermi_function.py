@@ -236,12 +236,12 @@ def evolution(A, W):
 
 
 def main(A, number_of_rounds):
-
-    tab = np.zeros((2*number_of_rounds,Z))
+    tab_1=np.zeros(Z)
+    tab_2 = np.zeros((number_of_rounds,Z))
     W= complete_game(A)
     for i in range(number_of_rounds):
-        tab[i]=number_of_cooperators(A[0])
-        tab[i+number_of_rounds]=A[1]
+        tab_1[i]=number_of_cooperators(A[0])
+        tab_2[i]=A[1]
         B = evolution(A, W)
         A = B
         W = complete_game(A)
