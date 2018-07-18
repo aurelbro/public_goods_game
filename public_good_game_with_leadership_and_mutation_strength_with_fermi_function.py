@@ -237,43 +237,16 @@ def evolution(A, W):
 
 def main(A, number_of_rounds):
 
-    tab = np.zeros(number_of_rounds)
-    #tab_coop_level= np.zeros(number_of_rounds)
-    t= [expon.ppf(0.10*i) for i in range(10)]
-    le=len(t)
-    count_c= np.zeros((number_of_generations, le))
-    proportion_c= np.zeros((number_of_generations, le))
-    count= np.zeros((number_of_generations, le))
+    tab = np.zeros((2*number_of_rounds,Z))
     W= complete_game(A)
-    for i in range(number_of_generations):
-        for l in range(le-1):
-            for j in range(Z):
-                if (t[l]<= A[1][j]<=t[l+1]):
-                    count[i][l]+=1
-                    if (A[0][j]==1):
-                      count_c[i][l]+=1
-        count[i][le-1]= Z- sum( count[i][k] for k in range(le-1) )
-        for j in range(Z):
-            if (A[1][j]>t[le-1]):
-                if (A[0][j]==1):
-                  count_c[i][le-1]+=1
-        tab[i] = number_of_cooperators(A[0])
-        s=np.sum(count_c[i])
-        for k in range(le):
-            proportion_c[i][k]=count_c[i][k]/s
-        #tab_coop_level[i]= coop_level
-        #print(i,tab[i])
-        #C=[ W[j] for j in range(len(A[0])) if (A[0][j]==1) ]
-        #D=[ W[j] for j in range(len(A[0])) if (A[0][j]==0) ]
-        #print(W[0],W[1],W[2])
-        #print(i,"c:"+ str(sum(C)/number_of_cooperators(A[0])),"d:"+str(sum(D)/(len(A[0])-number_of_cooperators(A[0]))))
-        #print(i,coop_level)
+    for i in range(number_of_rounds):
+        tab[i]=A[0]
+        tab[i+1]=A[1]
         B = evolution(A, W)
-        #print(B[0]!= A[0])
-        #if (B[0] != A[0]):
         A = B
         W = complete_game(A)
-    return tab, proportion_c, count/Z
+    return tab
+
 
 
 A = [ [0]*int(round(Z*(1-fc))) + [1]*int(round(Z*fc)), strengths ]
@@ -289,6 +262,6 @@ if not os.path.exists(subfolder):
     os.mkdir(subfolder)
 with open(subfolder + "/" + date + parameters, 'w') as fhOut:
     writer = csv.writer(fhOut, delimiter='\t', lineterminator='\n')
-    writer.writerow(a[0])
-    writer.writerow(a[1])
-    writer.writerow(a[2])
+    writer.writerow(a)
+    #writer.writerow(a[1])
+    #writer.writerow(a[2])
