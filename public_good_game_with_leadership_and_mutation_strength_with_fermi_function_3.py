@@ -19,7 +19,7 @@ nI = 5
 S = [0, 1]                    # set of strategies
 # fc = 0.5
 # M = 0                          # necessary threshold for the benefit being shared
-number_of_generations = 8000
+number_of_generations = 6000
 
 # importations
 
@@ -241,7 +241,7 @@ def main(A, number_of_rounds):
     t=[0.,0.65,0.75,0.85,0.95,1.05,1.15,1.25,1.35]
     le=len(t)
     count_c= np.zeros((number_of_generations, le))
-    proportion_c= np.zeros((number_of_generations, le))
+    # proportion_c= np.zeros((number_of_generations, le))
     count= np.zeros((number_of_generations, le))
     W= complete_game(A)
     for i in range(number_of_generations):
@@ -257,13 +257,14 @@ def main(A, number_of_rounds):
                 if (A[0][j]==1):
                   count_c[i][le-1]+=1
         tab[i] = number_of_cooperators(A[0])
-        s=np.sum(count_c[i])
-        for k in range(le):
-            proportion_c[i][k]=count_c[i][k]/s
+        #s=np.sum(count_c[i])
+        #for k in range(le):
+        #    proportion_c[i][k]=count_c[i][k]/s
         B = evolution(A, W)
         A = B
         W = complete_game(A)
-    return tab, proportion_c, count/Z
+    return tab, count_c, count/Z
+
 
 
 
