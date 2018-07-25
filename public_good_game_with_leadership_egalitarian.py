@@ -97,7 +97,7 @@ def values_of_fermi_function_with_strength(tab):            # calculation of all
             mat[i][j]= fermi_function_follow(i, j, tab)
     return(mat)
 
-strengths= np.zeros(Z)
+strengths= np.ones(Z)
 following= values_of_fermi_function_with_strength(strengths)   
 # print(Payoffs)
 
@@ -122,7 +122,7 @@ def complete_game(A):
             n=np.random.randint(N)                       # we pick randomly the leader for each group.
             for m in range(N):
                 #if (A[1][groups[k*N+m] - 1] < A[1][groups[k*N+n] - 1]):
-                b = np.random.random()
+                b = np.random.choice(N, 1, p= [ ( A[1][k*N+l] / sum( [ A[1][k*N+p] for p in range(N) ] )) for l in range(N) ]) [0]
                 if (b < following[groups[k*N+m]-1][groups[k*N+n]-1]):            # in each group, the player m will follow the leader with a certain probability
                     C[groups[k*N+m] - 1] = A[0][groups[k*N+n] - 1]                    
                 else:
@@ -245,11 +245,11 @@ def main(A, number_of_rounds):
     for i in range(number_of_rounds):
         tab[i] = number_of_cooperators(A[0])
         tab_coop_level[i]= coop_level
-        print(i,tab[i])
-        C=[ W[j] for j in range(len(A[0])) if (A[0][j]==1) ]
-        D=[ W[j] for j in range(len(A[0])) if (A[0][j]==0) ]
+        #print(i,tab[i])
+        #C=[ W[j] for j in range(len(A[0])) if (A[0][j]==1) ]
+        #D=[ W[j] for j in range(len(A[0])) if (A[0][j]==0) ]
         #print(W[0],W[1],W[2])
-        print(i,"c:"+ str(sum(C)/number_of_cooperators(A[0])),"d:"+str(sum(D)/(len(A[0])-number_of_cooperators(A[0]))))
+        #print(i,"c:"+ str(sum(C)/number_of_cooperators(A[0])),"d:"+str(sum(D)/(len(A[0])-number_of_cooperators(A[0]))))
         #print(i,coop_level)
         B = evolution(A, W)
         #print(B[0])
@@ -261,16 +261,16 @@ def main(A, number_of_rounds):
 
 A = [ [0]*int(round(Z*(1-fc))) + [1]*int(round(Z*fc)), strengths ]
 a = main(A, number_of_generations)
-#date = "run%04d" % seed # time.strftime("%Y%m%d-%H-%M-%S")
-#date = time.strftime("%Y%m%d-%H-%M-%S") + ("_%05d_" % new_seed)
+date = "run%04d" % seed # time.strftime("%Y%m%d-%H-%M-%S")
+date = time.strftime("%Y%m%d-%H-%M-%S") + ("_%05d_" % new_seed)
 
-#parameters = "r=%02d_mu=%.2f_Beta_imit=%.1f_Beta_follow=%.1f_fc=%.2f_M=%02d.tsv" % (
-#    r, mu, Beta_imit, Beta_follow, fc, M)
-#subfolder = parameters.strip(".tsv")
-#subfolder = folder + "/" + subfolder
-#if not os.path.exists(subfolder):
-#    os.mkdir(subfolder)
-#with open(subfolder + "/" + date + parameters, 'w') as fhOut:
-#    writer = csv.writer(fhOut, delimiter='\t', lineterminator='\n')
-#    writer.writerow(a[0])
-#    writer.writerow(a[1])
+parameters = "r=%02d_mu=%.2f_Beta_imit=%.1f_Beta_follow=%.1f_fc=%.2f_M=%02d.tsv" % (
+    r, mu, Beta_imit, Beta_follow, fc, M)
+subfolder = parameters.strip(".tsv")
+subfolder = folder + "/" + subfolder
+if not os.path.exists(subfolder):
+    os.mkdir(subfolder)
+with open(subfolder + "/" + date + parameters, 'w') as fhOut:
+    writer = csv.writer(fhOut, delimiter='\t', lineterminator='\n')
+    writer.writerow(a[0])
+    writer.writerow(a[1])
