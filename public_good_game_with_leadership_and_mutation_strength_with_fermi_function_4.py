@@ -19,7 +19,7 @@ nI = 5
 S = [0, 1]                    # set of strategies
 # fc = 0.5
 # M = 0                          # necessary threshold for the benefit being shared
-number_of_generations = 8000
+number_of_generations = 6000
 
 # importations
 
@@ -31,6 +31,8 @@ import csv
 import time
 import os
 from copy import deepcopy
+import scipy
+from scipy.stats import norm
 from scipy.stats import expon
 
 def usage():
@@ -98,8 +100,15 @@ def values_of_fermi_function_with_strength(tab):            # calculation of all
             mat[i][j]= fermi_function_follow(i, j, tab)
     return(mat)
 
-strengths= np.random.normal(0,1,Z)
-following= values_of_fermi_function_with_strength(strengths)   
+strengths= np.random.normal(1000,1,Z)
+#following= values_of_fermi_function_with_strength(strengths)   
+
+#def make_strength_positiv(M):
+#  minimum=min(M)
+#  M_bis=deepcopy(M)
+#  M_bis=M+abs(minimum)
+#  return M_bis
+
 # print(Payoffs)
 
 
@@ -110,6 +119,7 @@ def complete_game(A):
     W = np.zeros(Z)
     number_of_groups = Z//N
     groups = [i for i in range(1, Z+1)]
+   #B=make_strength_positiv(A[1])
 
     for i in range(number_of_games):
         # on mélange aléatoirement groups
@@ -123,7 +133,7 @@ def complete_game(A):
             n=np.random.randint(N)
             for m in range(N):
                 b = np.random.choice(N, 1, p= [ ( A[1][k*N+l] / sum( [ A[1][k*N+p] for p in range(N) ] )) for l in range(N) ]) [0]
-                if (b < following[groups[k*N+m]-1][groups[k*N+n]-1]):            #in each group, test if m player will follow the leader
+                if (b < fermi_function_follow(groups[k*N+m]-1,groups[k*N+n]-1,A[1])):            #in each group, test if m player will follow the leader
                     C[groups[k*N+m] - 1] = A[0][groups[k*N+n] - 1]                    
                 else:
                     C[groups[k*N+m] - 1] = A[0][groups[k*N+m] - 1]
@@ -156,12 +166,12 @@ def evolution(A, W):
             b = np.random.random()
             if (b < fermi_function_imit(i, j, W)):
                 B[0][i-1] = B[0][j-1]
-                B[1][i-1] = B[1][j-1] + np.random.normal(0,0.05,1)
+                B[1][i-1] = B[1][j-1] + np.random.normal(0,0.05,1)[0]
         else:
             i = np.random.randint(1, Z+1)
             mutation = np.random.randint(1, l+1)
             B[0][i-1] = S[mutation - 1]
-            B[1][i-1] += np.random.normal(0,0.05,1)
+            B[1][i-1] += np.random.normal(0,0.05,1)[0]
     return(B)
 
 
@@ -238,10 +248,10 @@ def evolution(A, W):
 
 def main(A, number_of_rounds):
     tab = np.zeros(number_of_rounds)
-    t=[0.,0.65,0.75,0.85,0.95,1.05,1.15,1.25,1.35]
+    t=scipy.stats.norm.ppf([.1, .2, .3, .4, .5, .6, .7, .8, .9], 0, 1)
     le=len(t)
     count_c= np.zeros((number_of_generations, le))
-    proportion_c= np.zeros((number_of_generations, le))
+   # proportion_c= np.zeros((number_of_generations, le))
     count= np.zeros((number_of_generations, le))
     W= complete_game(A)
     for i in range(number_of_generations):
@@ -257,17 +267,17 @@ def main(A, number_of_rounds):
                 if (A[0][j]==1):
                   count_c[i][le-1]+=1
         tab[i] = number_of_cooperators(A[0])
-        s=np.sum(count_c[i])
-        for k in range(le):
-            proportion_c[i][k]=count_c[i][k]/s
+        #s=np.sum(count_c[i])
+        #for k in range(le):
+        #    proportion_c[i][k]=count_c[i][k]/s
         B = evolution(A, W)
         A = B
         W = complete_game(A)
-    return tab, proportion_c, count/Z
+    return tab, count_c, count/Z
 
 
 
-A = [ [0]*int(round(Z*(1-fc))) + [1]*int(round(Z*fc)), strengths ]
+A = np.array([ [0]*int(round(Z*(1-fc))) + [1]*int(round(Z*fc)), strengths ] )
 a = main(A, number_of_generations)
 #date = "run%04d" % seed # time.strftime("%Y%m%d-%H-%M-%S")
 date = time.strftime("%Y%m%d-%H-%M-%S") + ("_%05d_" % new_seed)
